@@ -21,7 +21,8 @@ services:
       - postgres
 
   postgres:
-    container_name: '${POSTGRES_HOST}'
+    container_name: postgres
+    hostname: '${POSTGRES_HOST}'
     image: postgres:12
     networks:
       - webnet
