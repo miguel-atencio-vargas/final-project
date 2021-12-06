@@ -5,6 +5,10 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": "14.17",
+    "npm": "8.1"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
