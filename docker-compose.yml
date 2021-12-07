@@ -8,7 +8,6 @@ services:
       target: development
     volumes:
       - .:/usr/src/app
-      - /usr/src/app/node_modules
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
@@ -18,26 +17,20 @@ services:
     networks:
       - webnet
     depends_on:
-      - postgres
+      - mongo_db
 
-  postgres:
-    container_name: postgres
-    hostname: '${POSTGRES_HOST}'
-    image: postgres:12
+  mongo_db:
+    container_name: mongo_db
+    hostname: '${MONGO_HOST}'
+    image: mongo:4.4.11-rc0-focal
     networks:
       - webnet
-
     environment:
-      POSTGRES_USER: '${POSTGRES_USERNAME}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
-      POSTGRES_DB: '${POSTGRES_DATABASE_NAME}'
-      PG_DATA: /var/lib/postgresql/data
+      MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME}'
+      MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD}'
+      MONGO_INITDB_DATABASE: '${MONGO_DATABASE_NAME}'
     ports:
-      - 5432:5432
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+      - 27017:27017
 networks:
   webnet:
     driver: bridge
-volumes:
-  pgdata:
