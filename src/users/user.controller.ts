@@ -18,6 +18,6 @@ export class UserController {
 
   @Get()
   getUsers() {
-    return this.userService.find();
+    return this.userService.getAll();
   }
 }

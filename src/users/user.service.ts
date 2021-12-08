@@ -44,7 +44,7 @@ export class UserService {
    *
    * @returns all users in the DB
    */
-  async find(): Promise<ReadUserDto[]> {
+  async getAll(): Promise<ReadUserDto[]> {
     const users = await this.userModel.find();
     if (users.length === 0) throw new NotFoundException();
     return users.map((user) => plainToClass(ReadUserDto, user));
