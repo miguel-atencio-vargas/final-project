@@ -2,17 +2,31 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  NotImplementedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
+import { PatchUserDto } from './dto/patch-user.dto';
 import { ReadUserDto } from './dto/read-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+
+  /**
+   *
+   * @param updateUserDto
+   * @returns one user updated
+   */
+  async updateOne(
+    userId: string,
+    patchUserDto: PatchUserDto,
+  ): Promise<ReadUserDto> {
+    throw new NotImplementedException();
+  }
 
   /**
    *
