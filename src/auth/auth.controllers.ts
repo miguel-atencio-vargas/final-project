@@ -8,8 +8,8 @@ export class AppController {
 
   @Get()
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req) {
-    return 'googleAuthController';
+  async googleAuth() {
+    return '';
   }
 
   @Get('redirect')
