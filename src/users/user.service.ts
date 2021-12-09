@@ -65,7 +65,6 @@ export class UserService {
    */
   async findOne(userId: string): Promise<ReadUserDto> {
     const user = await this.userModel.findById(userId);
-    console.log('🚀 | UserService | findOne | user', user);
     if (!user) throw new NotFoundException();
     return plainToClass(ReadUserDto, user);
   }
