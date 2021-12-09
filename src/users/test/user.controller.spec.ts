@@ -19,6 +19,7 @@ describe('UserController', () => {
             findOne: jest.fn(),
             getAll: jest.fn(),
             updateOne: jest.fn(),
+            removeOne: jest.fn(),
           },
         },
       ],
@@ -80,6 +81,14 @@ describe('UserController', () => {
       ).resolves.toBeInstanceOf(ReadUserDto);
       expect(userService.updateOne).toBeCalledWith(userId, new PutUserDto());
       expect(userService.updateOne).toBeCalledTimes(1);
+    });
+  });
+
+  describe('removeUser()', () => {
+    it('should delete a user', () => {
+      const userId = '1';
+      userController.removeUser(userId);
+      expect(userService.removeOne).toBeCalledWith(userId);
     });
   });
 });

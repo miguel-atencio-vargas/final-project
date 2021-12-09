@@ -79,4 +79,12 @@ export class UserService {
     if (users.length === 0) throw new NotFoundException();
     return users.map((user) => plainToClass(ReadUserDto, user));
   }
+
+  /**
+   * @param id
+   */
+  async removeOne(userId: string): Promise<void> {
+    const user = await this.userModel.findOneAndRemove({ _id: userId });
+    if (!user) throw new NotFoundException(`User with id ${userId} not found`);
+  }
 }
