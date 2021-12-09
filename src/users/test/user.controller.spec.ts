@@ -1,7 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { PatchUserDto } from '../dto/patch-user.dto';
+import { PutUserDto } from '../dto/put-user.dto';
 import { ReadUserDto } from '../dto/read-user.dto';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
@@ -19,6 +18,7 @@ describe('UserController', () => {
             create: jest.fn(),
             findOne: jest.fn(),
             getAll: jest.fn(),
+            updateOne: jest.fn(),
           },
         },
       ],
@@ -76,9 +76,9 @@ describe('UserController', () => {
       const userId = '1';
       jest.spyOn(userService, 'updateOne').mockResolvedValue(new ReadUserDto());
       expect(
-        userController.updateUser(userId, new PatchUserDto()),
+        userController.updateUser(userId, new PutUserDto()),
       ).resolves.toBeInstanceOf(ReadUserDto);
-      expect(userService.updateOne).toBeCalledWith(userId, new PatchUserDto());
+      expect(userService.updateOne).toBeCalledWith(userId, new PutUserDto());
       expect(userService.updateOne).toBeCalledTimes(1);
     });
   });

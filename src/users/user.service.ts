@@ -18,6 +18,7 @@ export class UserService {
 
   /**
    *
+   * @param userId
    * @param updateUserDto
    * @returns one user updated
    */
@@ -31,6 +32,8 @@ export class UserService {
         putUserDto,
         { new: true },
       );
+      if (!userUpdated)
+        throw new NotFoundException(`User with id ${userId} not found`);
       return plainToClass(ReadUserDto, userUpdated);
     } catch (error) {
       throw new NotFoundException(error.message);
