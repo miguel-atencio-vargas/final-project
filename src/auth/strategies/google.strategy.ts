@@ -14,6 +14,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: process.env.GOOGLE_SECRET,
       callbackURL: 'http://localhost:3000/google/redirect',
       scope: ['email', 'profile'],
+      session: false,
+      acessType: 'offline',
+      approvalPrompt: 'force',
     });
   }
 
@@ -31,10 +34,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       picture: photos[0].value,
       accessToken,
     };
-    console.log(
-      '🚀 | GoogleStrategy | classGoogleStrategyextendsPassportStrategy | user',
-      user,
-    );
     done(null, user);
   }
 }
