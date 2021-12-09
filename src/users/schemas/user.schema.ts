@@ -3,13 +3,16 @@ import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
+  @Prop()
+  _id: string;
+
   @Prop({ type: String, unique: true })
   email: string;
 
   @Prop({ type: String })
-  firstName: number;
+  firstName: string;
 
   @Prop({ type: String })
   lastName: string;
@@ -17,7 +20,6 @@ export class User {
   @Prop()
   role: number;
 
-  //TODO: @IsMongoId()
   @Prop()
   companyId: number;
 }

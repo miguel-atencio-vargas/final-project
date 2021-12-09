@@ -13,7 +13,6 @@ export class CreateUserDto {
   @IsNumber()
   role: number;
 
-  // TODO: change to @IsMongoId
   @IsNumber()
   companyId: number;
 }

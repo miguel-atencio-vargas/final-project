@@ -2,15 +2,15 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  NotImplementedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
-import { PatchUserDto } from './dto/patch-user.dto';
+import { PutUserDto } from './dto/put-user.dto';
 import { ReadUserDto } from './dto/read-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class UserService {
@@ -23,9 +23,18 @@ export class UserService {
    */
   async updateOne(
     userId: string,
-    patchUserDto: PatchUserDto,
+    putUserDto: PutUserDto,
   ): Promise<ReadUserDto> {
-    throw new NotImplementedException();
+    try {
+      const userUpdated = await this.userModel.findOneAndReplace(
+        { _id: userId },
+        putUserDto,
+        { new: true },
+      );
+      return plainToClass(ReadUserDto, userUpdated);
+    } catch (error) {
+      throw new NotFoundException(error.message);
+    }
   }
 
   /**
@@ -35,9 +44,12 @@ export class UserService {
    */
   async create(createUserDto: CreateUserDto): Promise<ReadUserDto> {
     try {
-      const newUser = new this.userModel(createUserDto);
-      const savedUser = await newUser.save();
-      return plainToClass(ReadUserDto, savedUser);
+      const userId = nanoid();
+      const newUser = await this.userModel.create({
+        _id: userId,
+        ...createUserDto,
+      });
+      return plainToClass(ReadUserDto, newUser);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -50,6 +62,7 @@ export class UserService {
    */
   async findOne(userId: string): Promise<ReadUserDto> {
     const user = await this.userModel.findById(userId);
+    console.log('🚀 | UserService | findOne | user', user);
     if (!user) throw new NotFoundException();
     return plainToClass(ReadUserDto, user);
   }
