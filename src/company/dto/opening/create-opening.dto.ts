@@ -5,4 +5,6 @@ export class CreateOpeningDto {
   name: string;
   @IsString()
   description: string;
+  @IsString()
+  companyId: string;
 }

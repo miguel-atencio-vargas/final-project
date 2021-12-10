@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { SchemaTypes, Document } from 'mongoose';
+import { Document } from 'mongoose';
 import { Company } from './company.schema';
 
 export type OpeningDocument = Opening & Document;
@@ -16,7 +16,7 @@ export class Opening {
   @Prop({ type: String, unique: true })
   description: string;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: Company.name })
+  @Prop({ type: String, ref: Company.name })
   companyId: string;
 }
 export const OpeningSchema = SchemaFactory.createForClass(Opening);
