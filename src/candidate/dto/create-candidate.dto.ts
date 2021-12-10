@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsNotEmpty } from 'class-validator';
+import { IsString, IsEmail, IsOptional } from 'class-validator';
 
 export class CreateCandidateDto {
   @IsString()
@@ -10,13 +10,15 @@ export class CreateCandidateDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  uid: string;
+  uid?: string;
 
+  @IsOptional()
   @IsString()
-  openingId: string;
+  openingId?: string;
 
+  @IsOptional()
   @IsString()
-  stageId: string;
+  stageId?: string;
 }

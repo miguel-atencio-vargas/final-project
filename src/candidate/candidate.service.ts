@@ -78,6 +78,15 @@ export class CandidateService {
 
   /**
    *
+   * @param email
+   * @returns a candidate by email
+   */
+  findOneByEmail(email: string): Promise<Candidate> {
+    return this.candidateModel.findOne({ email }).exec();
+  }
+
+  /**
+   *
    * @returns all candidates in the DB
    */
   async getAll(): Promise<ReadCandidateDto[]> {

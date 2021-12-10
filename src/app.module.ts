@@ -9,7 +9,7 @@ import { UserModule } from './users/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(environments.mongoUri),
     AuthModule,
     CompanyModule,

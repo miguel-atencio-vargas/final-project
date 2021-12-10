@@ -8,7 +8,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CandidateService } from './candidate.service';
 import { CreateCandidateDto } from './dto/create-candidate.dto';
 import { PutCandidateDto } from './dto/put-candidate.dto';
@@ -27,6 +29,8 @@ export class CandidateController {
     return this.candidateService.findOne(candidateId);
   }
 
+  //TODO: just for test
+  @UseGuards(JwtAuthGuard)
   @Get()
   getCandidates() {
     return this.candidateService.getAll();
