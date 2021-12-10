@@ -9,9 +9,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { PutCompanyDto } from './dto/put-company.dto';
+import { CompanyService } from '../services/company.service';
+import { CreateCompanyDto } from '../dto/company/create-company.dto';
+import { PutCompanyDto } from '../dto/company/put-company.dto';
 
 @Controller('companies')
 export class CompanyController {
