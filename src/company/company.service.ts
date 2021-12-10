@@ -80,7 +80,7 @@ export class CompanyService {
       .find()
       .sort({ createdAt: 'desc' });
     if (companies.length === 0) throw new NotFoundException();
-    console.log('text');
+
     return companies.map((company) => plainToClass(ReadCompanyDto, company));
   }
 
