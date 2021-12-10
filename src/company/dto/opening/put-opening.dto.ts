@@ -5,4 +5,6 @@ export class PutOpeningDto {
   name: string;
   @IsString()
   description: string;
+  @IsString()
+  companyId: string;
 }

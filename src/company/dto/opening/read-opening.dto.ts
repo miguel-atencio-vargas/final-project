@@ -13,4 +13,8 @@ export class ReadOpeningDto {
   @Expose()
   @IsString()
   description: string;
+
+  @Expose()
+  @IsString()
+  companyId: string;
 }
