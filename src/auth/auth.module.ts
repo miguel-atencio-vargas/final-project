@@ -9,10 +9,12 @@ import { Jti, JtiSchema } from './schemas/jwt.schema';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategyService } from './strategies/jwt.strategy';
 import { JtiService } from './jti.service';
+import { UserModule } from '../users/user.module';
 
 @Module({
   imports: [
     CandidateModule,
+    UserModule,
     MongooseModule.forFeature([
       {
         name: Jti.name,

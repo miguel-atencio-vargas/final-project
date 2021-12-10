@@ -3,12 +3,14 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CandidateService } from '../../candidate/candidate.service';
 import { JtiService } from '../jti.service';
+import { UserService } from '../../users/user.service';
 
 @Injectable()
 export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     private candidateService: CandidateService,
     private tokenService: JtiService,
+    private userService: UserService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -28,10 +30,19 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
     const outUser = await this.tokenService.getTokenByJti(payload.jti);
     if (outUser) throw new UnauthorizedException('This token was invalidated');
     const candidate = await this.candidateService.findOneByEmail(payload.email);
+    if (candidate) {
+      return {
+        jti: payload.jti,
+        _id: candidate._id,
+        email: candidate.email,
+      };
+    }
+    const user = await this.userService.findOneByEmail(payload.email);
     return {
-      _id: candidate._id,
-      email: candidate.email,
       jti: payload.jti,
+      _id: user._id,
+      email: user.email,
+      permissionsFlags: user.permissionFlags,
     };
   }
 }

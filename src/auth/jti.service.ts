@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
-import { ReadJtiDto } from './dto/read.jwt.dto';
+import { ReadJtiDto } from './dto/read.jti.dto';
 import { Jti, JtiDocument } from './schemas/jwt.schema';
 
 export class JtiService {
@@ -17,7 +17,7 @@ export class JtiService {
    *
    */
   getTokenByJti(jti: string) {
-    return this.jtiModel.findOne({ jti });
+    return this.jtiModel.findById(jti);
   }
 
   /**

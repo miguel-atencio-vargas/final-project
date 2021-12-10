@@ -71,6 +71,15 @@ export class UserService {
 
   /**
    *
+   * @param email
+   * @returns a user by email
+   */
+  findOneByEmail(email: string): Promise<User> {
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  /**
+   *
    * @returns all users in the DB
    */
   async getAll(): Promise<ReadUserDto[]> {

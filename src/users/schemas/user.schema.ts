@@ -18,7 +18,7 @@ export class User {
   lastName: string;
 
   @Prop()
-  role: number;
+  permissionFlags: number;
 
   @Prop()
   companyId: number;

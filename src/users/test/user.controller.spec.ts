@@ -58,7 +58,7 @@ describe('UserController', () => {
       firstName: '',
       lastName: '',
       email: '',
-      role: 0,
+      permissionFlags: 0,
       companyId: 0,
     };
     it('should return a new user', () => {
