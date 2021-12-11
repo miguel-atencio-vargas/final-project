@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { nanoid } from 'nanoid';
-import { CandidateService } from '../candidate/candidate.service';
-import { CreateCandidateDto } from '../candidate/dto/create-candidate.dto';
-import { UserService } from '../users/user.service';
-import { GoogleUserDto } from './dto/google-user.dto';
+import { CandidateService } from '../../candidate/candidate.service';
+import { CreateCandidateDto } from '../../candidate/dto/create-candidate.dto';
+import { UserService } from '../../users/user.service';
+import { GoogleUserDto } from '../dto/google-user.dto';
 import { JtiService } from './jti.service';
 
 @Injectable()
