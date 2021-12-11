@@ -10,7 +10,7 @@ import { StageModule } from './stage/stage.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(environments.mongoUri),
     AuthModule,
     CompanyModule,

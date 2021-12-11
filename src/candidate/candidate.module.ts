@@ -15,5 +15,6 @@ import { Candidate, CandidateSchema } from './schemas/candidate.schema';
   ],
   controllers: [CandidateController],
   providers: [CandidateService],
+  exports: [CandidateService],
 })
 export class CandidateModule {}

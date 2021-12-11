@@ -8,7 +8,7 @@ export class Candidate {
   @Prop()
   _id: string;
 
-  @Prop({ type: String, unique: true })
+  @Prop({ type: String, unique: true, required: true })
   email: string;
 
   @Prop({ type: String })

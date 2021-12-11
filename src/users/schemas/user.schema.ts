@@ -17,11 +17,11 @@ export class User {
   @Prop({ type: String })
   lastName: string;
 
-  @Prop()
-  role: number;
+  @Prop({ type: String })
+  role: string;
 
-  @Prop()
-  companyId: number;
+  @Prop({ type: String })
+  companyId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
