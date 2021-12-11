@@ -8,7 +8,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { RoleUser } from '../users/enum/roles.enums';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { PutCompanyDto } from './dto/put-company.dto';
@@ -22,6 +27,8 @@ export class CompanyController {
     return this.companyService.create(crateCompanyDto);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN)
   @Get(':id')
   getCompanyById(@Param('id') companyId: string) {
     return this.companyService.findOne(companyId);

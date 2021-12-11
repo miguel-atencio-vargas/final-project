@@ -54,7 +54,7 @@ export class AuthService {
       jti: nanoid(),
       sub: userDB._id,
       email: userDB.email,
-      permissionFlags: userDB.permissionFlags,
+      role: userDB.role,
     });
     return { access_token };
   }

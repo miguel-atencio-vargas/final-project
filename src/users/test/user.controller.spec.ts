@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateSudoUserDto } from '../dto/create-sudo-user.dto';
 import { PutUserDto } from '../dto/put-user.dto';
 import { ReadUserDto } from '../dto/read-user.dto';
 import { UserController } from '../user.controller';
@@ -54,7 +54,7 @@ describe('UserController', () => {
   });
 
   describe('createUser()', () => {
-    const customerToCreate: CreateUserDto = {
+    const customerToCreate: CreateSudoUserDto = {
       firstName: '',
       lastName: '',
       email: '',
@@ -66,7 +66,7 @@ describe('UserController', () => {
       expect(userController.newUser(customerToCreate)).resolves.toBeInstanceOf(
         ReadUserDto,
       );
-      expect(userService.create).toBeCalledWith<CreateUserDto[]>(
+      expect(userService.create).toBeCalledWith<CreateSudoUserDto[]>(
         customerToCreate,
       );
     });

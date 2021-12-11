@@ -8,19 +8,38 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { Roles } from '../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { CreateCompanyUserDto } from './dto/create-company-user.dto';
 
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateSudoUserDto } from './dto/create-sudo-user.dto';
 import { PutUserDto } from './dto/put-user.dto';
+import { RoleUser } from './enum/roles.enums';
 import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  newUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.SUDO_ADMIN)
+  @Post('sudo')
+  newSudoAdmin(@Body() data: CreateSudoUserDto) {
+    // TODO: companyID its not required and should be deleted
+    return this.userService.create(data, RoleUser.SUDO_ADMIN);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
+  //TODO: Role SUDO_ADMIN needed OR
+  //TODO: Role COMPANY_ADMIN needed, and should be the same company
+  @Post('company')
+  newCompanyUser(@Body() data: CreateCompanyUserDto) {
+    // TODO: companyID its required
+    return this.userService.create(data, data.rolEnum);
   }
 
   @Get(':id')
