@@ -5,12 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Company, CompanyDocument } from './schemas/company.schema';
-import { ReadCompanyDto } from './dto/read-company,dto';
-import { CreateCompanyDto } from './dto/create-company.dto';
+import { Company, CompanyDocument } from '../schemas/company.schema';
+import { ReadCompanyDto } from '../dto/company/read-company,dto';
+import { CreateCompanyDto } from '../dto/company/create-company.dto';
 import { nanoid } from 'nanoid';
 import { plainToClass } from 'class-transformer';
-import { PutCompanyDto } from './dto/put-company.dto';
+import { PutCompanyDto } from '../dto/company/put-company.dto';
 
 @Injectable()
 export class CompanyService {
@@ -59,6 +59,7 @@ export class CompanyService {
       throw new NotFoundException(error.message);
     }
   }
+
   /**
    *
    * @param companyId
@@ -80,7 +81,7 @@ export class CompanyService {
       .find()
       .sort({ createdAt: 'desc' });
     if (companies.length === 0) throw new NotFoundException();
-    console.log('text');
+
     return companies.map((company) => plainToClass(ReadCompanyDto, company));
   }
 

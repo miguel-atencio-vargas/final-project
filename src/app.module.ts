@@ -6,6 +6,7 @@ import { CandidateModule } from './candidate/candidate.module';
 import { environments } from './config/enviroments';
 import { CompanyModule } from './company/company.module';
 import { UserModule } from './users/user.module';
+import { StageModule } from './stage/stage.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from './users/user.module';
     CompanyModule,
     UserModule,
     CandidateModule,
+    StageModule,
   ],
 })
 export class AppModule {}

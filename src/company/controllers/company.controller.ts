@@ -9,16 +9,15 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CompanyService } from './company.service';
-import { CreateCompanyDto } from './dto/create-company.dto';
-import { PutCompanyDto } from './dto/put-company.dto';
+import { CompanyService } from '../services/company.service';
+import { CreateCompanyDto } from '../dto/company/create-company.dto';
+import { PutCompanyDto } from '../dto/company/put-company.dto';
 
-@Controller('company')
+@Controller('companies')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
   @Post()
   newCompany(@Body() crateCompanyDto: CreateCompanyDto) {
-    console.log('hello');
     return this.companyService.create(crateCompanyDto);
   }
 
