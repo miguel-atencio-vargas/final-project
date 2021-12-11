@@ -29,7 +29,6 @@ export class CandidateController {
     return this.candidateService.findOne(candidateId);
   }
 
-  //TODO: just for test
   @UseGuards(JwtAuthGuard)
   @Get()
   getCandidates() {

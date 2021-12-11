@@ -33,11 +33,8 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
-  //TODO: Role SUDO_ADMIN needed OR
-  //TODO: Role COMPANY_ADMIN needed, and should be the same company
   @Post('company')
   newCompanyUser(@Body() data: CreateCompanyUserDto) {
-    // TODO: companyID its required
     return this.userService.create(data, data.roleEnum);
   }
 
