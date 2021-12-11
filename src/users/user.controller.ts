@@ -28,7 +28,6 @@ export class UserController {
   @Roles(RoleUser.SUDO_ADMIN)
   @Post('sudo')
   newSudoAdmin(@Body() data: CreateSudoUserDto) {
-    // TODO: companyID its not required and should be deleted
     return this.userService.create(data, RoleUser.SUDO_ADMIN);
   }
 
@@ -39,7 +38,7 @@ export class UserController {
   @Post('company')
   newCompanyUser(@Body() data: CreateCompanyUserDto) {
     // TODO: companyID its required
-    return this.userService.create(data, data.rolEnum);
+    return this.userService.create(data, data.roleEnum);
   }
 
   @Get(':id')

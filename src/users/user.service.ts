@@ -58,7 +58,6 @@ export class UserService {
         role: RoleUser[role],
         ...createUserDto,
       });
-      console.log('🚀 | UserService | create | newUser', newUser);
       return plainToClass(ReadUserDto, newUser);
     } catch (error) {
       throw new BadRequestException(error.message);

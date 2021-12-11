@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CandidateModule } from '../candidate/candidate.module';
-import { AppController } from './auth.controllers';
+import { AuthController } from './auth.controllers';
 import { AuthService } from './auth.service';
 import { Jti, JtiSchema } from './schemas/jwt.schema';
 import { GoogleStrategy } from './strategies/google.strategy';
@@ -29,7 +29,7 @@ import { UserModule } from '../users/user.module';
       }),
     }),
   ],
-  controllers: [AppController],
+  controllers: [AuthController],
   providers: [AuthService, GoogleStrategy, JtiService, JwtStrategyService],
 })
 export class AuthModule {}

@@ -11,13 +11,13 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller()
-export class AppController {
+export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth() {
-    return '';
+  googleAuth() {
+    return;
   }
 
   @Get('google/redirect')

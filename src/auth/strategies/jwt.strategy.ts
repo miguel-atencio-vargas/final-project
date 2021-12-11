@@ -35,6 +35,7 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
         jti: payload.jti,
         _id: candidate._id,
         email: candidate.email,
+        stageId: candidate.stageId,
       };
     }
     const user = await this.userService.findOneByEmail(payload.email);
@@ -42,7 +43,8 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
       jti: payload.jti,
       _id: user._id,
       email: user.email,
-      permissionsFlags: user.role,
+      roles: user.role,
+      companyId: user.companyId,
     };
   }
 }
