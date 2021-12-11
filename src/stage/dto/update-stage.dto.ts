@@ -1,6 +1,6 @@
 import { IsString, IsEmail } from 'class-validator';
 
-export class UpdateStageDto {
+export class PutStageDto {
   @IsString()
   title: string;
 
