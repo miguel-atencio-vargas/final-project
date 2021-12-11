@@ -1,8 +1,8 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
-import { ReadJtiDto } from './dto/read.jti.dto';
-import { Jti, JtiDocument } from './schemas/jwt.schema';
+import { ReadJtiDto } from '../dto/read.jti.dto';
+import { Jti, JtiDocument } from '../schemas/jwt.schema';
 
 export class JtiService {
   constructor(
