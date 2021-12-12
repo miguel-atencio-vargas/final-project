@@ -19,4 +19,4 @@ export class Stage {
   companyId: string;
 }
 
-export const CompanySchema = SchemaFactory.createForClass(Company);
+export const StageSchema = SchemaFactory.createForClass(Stage);
