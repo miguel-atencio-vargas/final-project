@@ -29,8 +29,8 @@ services:
       MONGO_INITDB_ROOT_USERNAME: '${MONGO_USERNAME}'
       MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD}'
       MONGO_INITDB_DATABASE: '${MONGO_DATABASE_NAME}'
-    expose:
-      - '27017'
+    ports:
+      - '27018:27017'
 networks:
   webnet:
     driver: bridge
