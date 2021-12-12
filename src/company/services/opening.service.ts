@@ -77,9 +77,17 @@ export class OpeningService {
    * @returns an opening searched by Id
    */
   async findOne(openingId: string): Promise<ReadOpeningDto> {
-    const opening = await this.openingModel.findById(openingId);
+    const opening = await this.openingModel
+      .findById(openingId)
+      .populate({
+        path: 'companyId',
+        select: 'name',
+      })
+      .exec();
     if (!opening) throw new NotFoundException();
-    return plainToClass(ReadOpeningDto, opening);
+    console.log(opening);
+
+    return opening;
   }
 
   /**
