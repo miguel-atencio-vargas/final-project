@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CandidateController } from './candidate.controller';
-import { CandidateService } from './candidate.service';
+import { CandidateController } from './controllers/candidate.controller';
+import { CandidateService } from './services/candidate.service';
 import { Candidate, CandidateSchema } from './schemas/candidate.schema';
 
 @Module({

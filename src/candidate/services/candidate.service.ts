@@ -7,10 +7,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { nanoid } from 'nanoid';
-import { CreateCandidateDto } from './dto/create-candidate.dto';
-import { PutCandidateDto } from './dto/put-candidate.dto';
-import { ReadCandidateDto } from './dto/read-candidate.dto';
-import { Candidate, CandidateDocument } from './schemas/candidate.schema';
+import { CreateCandidateDto } from '../dto/create-candidate.dto';
+import { PatchCandidateDto } from '../dto/patch-candidate.dto';
+import { PatchInternalCandidateDto } from '../dto/patch-internal-candidate.dto';
+import { PutCandidateDto } from '../dto/put-candidate.dto';
+import { ReadCandidateDto } from '../dto/read-candidate.dto';
+import { Candidate, CandidateDocument } from '../schemas/candidate.schema';
 
 @Injectable()
 export class CandidateService {
@@ -42,6 +44,19 @@ export class CandidateService {
       return plainToClass(ReadCandidateDto, candidateUpdated);
     } catch (error) {
       throw new NotFoundException(error.message);
+    }
+  }
+
+  patchOne(
+    candidateId: string,
+    data: PatchInternalCandidateDto | PatchCandidateDto,
+  ): Promise<ReadCandidateDto> {
+    try {
+      return this.candidateModel
+        .findByIdAndUpdate(candidateId, { $set: data }, { new: true })
+        .exec();
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
   }
 
