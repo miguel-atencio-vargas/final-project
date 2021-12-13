@@ -18,7 +18,7 @@ export class ReadCandidateDto {
   @IsEmail()
   readonly email: string;
 
-  @Expose()
+  @Exclude()
   @IsString()
   readonly uid: string;
 

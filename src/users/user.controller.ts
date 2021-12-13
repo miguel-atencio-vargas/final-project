@@ -26,16 +26,19 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN)
-  @Post('sudo')
+  @Post('sudo/create')
   newSudoAdmin(@Body() data: CreateSudoUserDto) {
     return this.userService.create(data, RoleUser.SUDO_ADMIN);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
-  @Post('company')
-  newCompanyUser(@Body() data: CreateCompanyUserDto) {
-    return this.userService.create(data, data.roleEnum);
+  @Post('companies/:companyId/create')
+  newCompanyUser(
+    @Param('companyId') companyId: string,
+    @Body() data: CreateCompanyUserDto,
+  ) {
+    return this.userService.create(data, data.roleEnum, companyId);
   }
 
   @Get(':id')

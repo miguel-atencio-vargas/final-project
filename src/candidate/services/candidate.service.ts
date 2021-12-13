@@ -7,10 +7,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { nanoid } from 'nanoid';
-import { CreateCandidateDto } from './dto/create-candidate.dto';
-import { PutCandidateDto } from './dto/put-candidate.dto';
-import { ReadCandidateDto } from './dto/read-candidate.dto';
-import { Candidate, CandidateDocument } from './schemas/candidate.schema';
+import { CreateCandidateDto } from '../dto/create-candidate.dto';
+import { PatchCandidateDto } from '../dto/patch-candidate.dto';
+import { PatchInternalCandidateDto } from '../dto/patch-internal-candidate.dto';
+import { PutCandidateDto } from '../dto/put-candidate.dto';
+import { ReadCandidateDto } from '../dto/read-candidate.dto';
+import { Candidate, CandidateDocument } from '../schemas/candidate.schema';
 
 @Injectable()
 export class CandidateService {
@@ -47,6 +49,27 @@ export class CandidateService {
 
   /**
    *
+   * @param candidateId
+   * @param data candidate data to update
+   * @returns the candidate updated
+   */
+  async patchOne(
+    candidateId: string,
+    data: PatchInternalCandidateDto | PatchCandidateDto,
+  ): Promise<ReadCandidateDto> {
+    const candidateUpdated = await this.candidateModel
+      .findByIdAndUpdate(candidateId, { $set: data }, { new: true })
+      .exec();
+    if (!candidateUpdated) {
+      throw new BadRequestException(
+        `Candidate with id ${candidateId} not found`,
+      );
+    }
+    return plainToClass(ReadCandidateDto, candidateUpdated);
+  }
+
+  /**
+   *
    * @param createCandidateDto
    * @returns a new candidate created
    */
@@ -72,7 +95,7 @@ export class CandidateService {
    */
   async findOne(candidateId: string): Promise<ReadCandidateDto> {
     const candidate = await this.candidateModel.findById(candidateId);
-    if (!candidate) throw new NotFoundException();
+    if (!candidate) throw new NotFoundException(`Candidate not found`);
     return plainToClass(ReadCandidateDto, candidate);
   }
 

@@ -50,6 +50,7 @@ export class UserService {
   async create(
     createUserDto: CreateSudoUserDto | CreateCompanyUserDto,
     role: RoleUser,
+    companyId?: string,
   ): Promise<ReadUserDto> {
     try {
       const userId = nanoid();
@@ -57,6 +58,7 @@ export class UserService {
         _id: userId,
         role: RoleUser[role],
         ...createUserDto,
+        companyId,
       });
       return plainToClass(ReadUserDto, newUser);
     } catch (error) {

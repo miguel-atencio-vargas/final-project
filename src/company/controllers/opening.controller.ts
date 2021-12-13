@@ -8,7 +8,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { Roles } from '../../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../auth/guards/roles.guard';
+import { RoleUser } from '../../users/enum/roles.enums';
 import { CreateOpeningDto } from '../dto/opening/create-opening.dto';
 import { PutOpeningDto } from '../dto/opening/put-opening.dto';
 import { OpeningService } from '../services/opening.service';
@@ -17,9 +22,14 @@ import { OpeningService } from '../services/opening.service';
 export class OpeningController {
   constructor(private readonly openingService: OpeningService) {}
 
-  @Post()
-  newOpening(@Body() createOpeningDto: CreateOpeningDto) {
-    return this.openingService.create(createOpeningDto);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
+  @Post('companies/:companyId')
+  newOpening(
+    @Param('companyId') companyId: string,
+    @Body() createOpeningDto: CreateOpeningDto,
+  ) {
+    return this.openingService.create(companyId, createOpeningDto);
   }
 
   @Get()
@@ -32,17 +42,19 @@ export class OpeningController {
     return this.openingService.findOne(openingId);
   }
 
-  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
+  @Put(':openingId/companies/:companyId')
   updateOpening(
-    @Param('id') id: string,
+    @Param('openingId') openingId: string,
     @Body() patchOpeningDto: PutOpeningDto,
   ) {
-    return this.openingService.updateOne(id, patchOpeningDto);
+    return this.openingService.updateOne(openingId, patchOpeningDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
-  removeOpening(@Param('id') id: string) {
-    return this.openingService.removeOne(id);
+  @Delete(':openingId/companies/:companyId')
+  removeOpening(@Param('companyId') companyId: string) {
+    return this.openingService.removeOne(companyId);
   }
 }

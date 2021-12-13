@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Company } from '../../company/schemas/company.schema';
+import { Company } from './company.schema';
 
 export type StageDocument = Stage & Document;
 
@@ -17,6 +17,12 @@ export class Stage {
 
   @Prop({ type: String, ref: Company.name })
   companyId: string;
+
+  @Prop({ type: String, default: null, ref: Stage.name })
+  previusStage: string;
+
+  @Prop({ type: String, default: null, ref: Stage.name })
+  nextStage: string;
 }
 
 export const StageSchema = SchemaFactory.createForClass(Stage);

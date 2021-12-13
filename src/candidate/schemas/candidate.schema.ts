@@ -20,10 +20,10 @@ export class Candidate {
   @Prop({ type: String, unique: true })
   uid: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: null })
   openingId: string;
 
-  @Prop({ type: String })
+  @Prop({ type: String, default: null })
   stageId: string;
 }
 
