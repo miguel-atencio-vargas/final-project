@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsEnum } from 'class-validator';
 import { RoleUser } from '../enum/roles.enums';
 
 export class CreateCompanyUserDto {
@@ -13,8 +13,4 @@ export class CreateCompanyUserDto {
 
   @IsEnum(RoleUser)
   roleEnum: RoleUser;
-
-  @IsString()
-  @IsOptional()
-  companyId?: string;
 }
