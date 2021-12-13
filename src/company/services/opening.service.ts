@@ -19,15 +19,20 @@ export class OpeningService {
   ) {}
   /**
    *
+   * @param companyId
    * @param createOpeningDto
-   * @returns a new opening createde
+   * @returns a new opening created
    */
-  async create(createOpeningDto: CreateOpeningDto): Promise<ReadOpeningDto> {
+  async create(
+    companyId: string,
+    createOpeningDto: CreateOpeningDto,
+  ): Promise<ReadOpeningDto> {
     try {
       const openingId = nanoid();
       const newOpening = await this.openingModel.create({
         _id: openingId,
         ...createOpeningDto,
+        companyId,
       });
       return plainToClass(ReadOpeningDto, newOpening);
     } catch (error) {
@@ -37,7 +42,7 @@ export class OpeningService {
 
   /**
    *
-   * @returns all openings in the DataBase
+   * @returns all openings in the Database
    * by the creation date
    */
   async getAll(): Promise<ReadOpeningDto[]> {

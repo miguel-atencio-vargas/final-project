@@ -23,14 +23,13 @@ export class OpeningController {
   constructor(private readonly openingService: OpeningService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(
-    RoleUser.SUDO_ADMIN,
-    RoleUser.COMPANY_ADMIN,
-    RoleUser.COMPANY_RECRUITER,
-  )
-  @Post()
-  newOpening(@Body() createOpeningDto: CreateOpeningDto) {
-    return this.openingService.create(createOpeningDto);
+  @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
+  @Post('companies/:companyId')
+  newOpening(
+    @Param('companyId') companyId: string,
+    @Body() createOpeningDto: CreateOpeningDto,
+  ) {
+    return this.openingService.create(companyId, createOpeningDto);
   }
 
   @Get()
@@ -43,17 +42,19 @@ export class OpeningController {
     return this.openingService.findOne(openingId);
   }
 
-  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
+  @Put(':openingId/companies/:companyId')
   updateOpening(
-    @Param('id') id: string,
+    @Param('openingId') openingId: string,
     @Body() patchOpeningDto: PutOpeningDto,
   ) {
-    return this.openingService.updateOne(id, patchOpeningDto);
+    return this.openingService.updateOne(openingId, patchOpeningDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
-  removeOpening(@Param('id') id: string) {
-    return this.openingService.removeOne(id);
+  @Delete(':openingId/companies/:companyId')
+  removeOpening(@Param('companyId') companyId: string) {
+    return this.openingService.removeOne(companyId);
   }
 }
