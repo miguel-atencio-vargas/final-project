@@ -1,33 +1,47 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-
-import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MailService {
-  Email = require('email-templates');
-  transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'ernesto1991diaz@gmail.com',
-      pass: 'gegzcjluilqvatcf',
-    },
-  });
+  constructor(private mailerService: MailerService) {}
 
-  /**
-   *
-   *
-   * @returns obj info to wrap the email template
-   */
-  async sendEmail(to: string, subject: string, text: string, html: string) {
-    const info = await this.transporter.sendMail({
-      from: `Company companyName`, // sender address
-      to,
-      subject: 'Important information for openings ' + subject,
-      text,
-      html: `<strong>${text}</strong><br>${html}`,
+  async sendConfirmationEmail() {
+    await this.mailerService.sendMail({
+      to: '2551592011@mail.utec.edu.sv',
+      subject: 'Welcome to Node Trainee Program',
+      template: './approvedCandidate',
+      context: {
+        name: 'Miguel',
+        opening: 'Node js',
+      },
+
+      attachments: [
+        {
+          filename: 'image-1.png',
+          path: __dirname + `/templates/images/image-1.png`,
+          cid: 'twitter',
+        },
+        {
+          filename: 'image-2.png',
+          path: __dirname + `/templates/images/image-2.png`,
+          cid: 'instagram',
+        },
+        {
+          filename: 'image-3.png',
+          path: __dirname + `/templates/images/image-3.png`,
+          cid: 'linkeding',
+        },
+        {
+          filename: 'image-4.png',
+          path: __dirname + `/templates/images/image-4.png`,
+          cid: 'youtube',
+        },
+        {
+          filename: 'image-5.png',
+          path: __dirname + `/templates/images/image-5.png`,
+          cid: 'heroImage',
+        },
+      ],
     });
-    return info;
   }
 }
