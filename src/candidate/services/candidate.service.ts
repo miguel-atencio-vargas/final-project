@@ -47,17 +47,25 @@ export class CandidateService {
     }
   }
 
-  patchOne(
+  /**
+   *
+   * @param candidateId
+   * @param data candidate data to update
+   * @returns the candidate updated
+   */
+  async patchOne(
     candidateId: string,
     data: PatchInternalCandidateDto | PatchCandidateDto,
   ): Promise<ReadCandidateDto> {
-    try {
-      return this.candidateModel
-        .findByIdAndUpdate(candidateId, { $set: data }, { new: true })
-        .exec();
-    } catch (error) {
-      throw new BadRequestException(error.message);
+    const candidateUpdated = await this.candidateModel
+      .findByIdAndUpdate(candidateId, { $set: data }, { new: true })
+      .exec();
+    if (!candidateUpdated) {
+      throw new BadRequestException(
+        `Candidate with id ${candidateId} not found`,
+      );
     }
+    return plainToClass(ReadCandidateDto, candidateUpdated);
   }
 
   /**
@@ -87,7 +95,7 @@ export class CandidateService {
    */
   async findOne(candidateId: string): Promise<ReadCandidateDto> {
     const candidate = await this.candidateModel.findById(candidateId);
-    if (!candidate) throw new NotFoundException();
+    if (!candidate) throw new NotFoundException(`Candidate not found`);
     return plainToClass(ReadCandidateDto, candidate);
   }
 

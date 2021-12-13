@@ -1,15 +1,17 @@
 import { Controller, Param, Post } from '@nestjs/common';
-import { CandidateService } from '../services/candidate.service';
+import { CandidateOpeningService } from '../services/candidate-opening.service';
 
-@Controller('openings')
+@Controller('candidates')
 export class CandidateOpeningController {
-  constructor(private readonly candidateService: CandidateService) {}
+  constructor(
+    private readonly candidateOpeningService: CandidateOpeningService,
+  ) {}
 
-  @Post(':openingId/candidates/:candidateId')
-  applyToAnOpenning(
+  @Post(':candidateId/openings/:openingId')
+  applyToAnOpening(
     @Param('candidateId') candidateId: string,
     @Param('openingId') openingId: string,
   ) {
-    return '';
+    return this.candidateOpeningService.applyTo(candidateId, openingId);
   }
 }

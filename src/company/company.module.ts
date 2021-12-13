@@ -26,5 +26,6 @@ import { CompanyStageController } from './controllers/company-stage.controller';
     StageController,
     CompanyStageController,
   ],
+  exports: [OpeningService],
 })
 export class CompanyModule {}
