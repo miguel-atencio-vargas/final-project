@@ -18,7 +18,7 @@ import { MailController } from './mail.controller';
         },
       },
       defaults: {
-        from: 'No Reply" <noreply@example.com>',
+        from: 'No Reply <noreply@example.com>',
       },
       template: {
         dir: join(__dirname, 'templates'),
