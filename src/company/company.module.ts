@@ -4,12 +4,12 @@ import { CompanyController } from '../company/controllers/company.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Company, CompanySchema } from './schemas/company.schema';
 import { OpeningService } from '../company/services/opening.service';
-import { OpeningController } from '../company/controllers/opening.controller';
+import { CompanyOpeningController } from './controllers/opening/company-opening.controller';
 import { Opening, OpeningSchema } from './schemas/opening.schema';
 import { Stage, StageSchema } from './schemas/stage.schema';
 import { StageService } from './services/stage.service';
 import { StageController } from './controllers/stage.controller';
-import { CompanyStageController } from './controllers/company-stage.controller';
+import { OpeningController } from './controllers/opening/opening.controller';
 
 @Module({
   imports: [
@@ -22,9 +22,9 @@ import { CompanyStageController } from './controllers/company-stage.controller';
   providers: [CompanyService, OpeningService, StageService],
   controllers: [
     CompanyController,
+    CompanyOpeningController,
     OpeningController,
     StageController,
-    CompanyStageController,
   ],
   exports: [OpeningService],
 })

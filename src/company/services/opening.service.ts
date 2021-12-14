@@ -53,6 +53,20 @@ export class OpeningService {
   }
 
   /**
+   * @param companyId
+   * @returns all openings scoped by company
+   * by the creation date
+   */
+  async getAllByCompany(companyId: string): Promise<ReadOpeningDto[]> {
+    const openings = await this.openingModel
+      .find({ companyId })
+      .sort({ createdAt: 'desc' });
+    if (openings.length === 0)
+      throw new NotFoundException('Openings not found');
+    return openings.map((opening) => plainToClass(ReadOpeningDto, opening));
+  }
+
+  /**
    *
    * @param openingId
    * @param putOpeningDto
@@ -89,9 +103,27 @@ export class OpeningService {
         select: 'name',
       })
       .exec();
-    if (!opening) throw new NotFoundException();
-    console.log(opening);
+    if (!opening) throw new NotFoundException('Opening not found');
+    return opening;
+  }
 
+  /**
+   *
+   * @param openingID
+   * @returns an opening searched by Id
+   */
+  async findOneOnACompany(
+    openingId: string,
+    companyId: string,
+  ): Promise<ReadOpeningDto> {
+    const opening = await this.openingModel
+      .findOne({ _id: openingId, companyId })
+      .populate({
+        path: 'companyId',
+        select: 'name',
+      })
+      .exec();
+    if (!opening) throw new NotFoundException('Opening not found');
     return opening;
   }
 
