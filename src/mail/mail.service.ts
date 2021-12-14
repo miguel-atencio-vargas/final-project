@@ -7,9 +7,9 @@ export class MailService {
 
   async sendConfirmationEmail() {
     await this.mailerService.sendMail({
-      to: '2551592011@mail.utec.edu.sv',
+      to: 'ernesto1991diaz@gmail.com',
       subject: 'Welcome to Node Trainee Program',
-      template: './approvedCandidate',
+      template: './rejected',
       context: {
         name: 'Miguel',
         opening: 'Node js',
