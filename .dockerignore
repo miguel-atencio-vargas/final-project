@@ -14,7 +14,7 @@ node_modules
 
 # Temporary and built assets
 tmp
-dist
+
 
 # Local development
 docker-compose.override.yml
