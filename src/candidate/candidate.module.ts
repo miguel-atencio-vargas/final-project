@@ -7,6 +7,7 @@ import { CandidateOpeningController } from './controllers/candidate-opening.cont
 import { CandidateOpeningService } from './services/candidate-opening.service';
 import { CompanyModule } from '../company/company.module';
 import { CandidatesController } from './controllers/candidate.controller';
+import { CompanyCandidateService } from './services/company-candidate.service';
 
 @Module({
   imports: [
@@ -23,7 +24,11 @@ import { CandidatesController } from './controllers/candidate.controller';
     CandidateOpeningController,
     CandidatesController,
   ],
-  providers: [CandidateService, CandidateOpeningService],
+  providers: [
+    CandidateService,
+    CandidateOpeningService,
+    CompanyCandidateService,
+  ],
   exports: [CandidateService],
 })
 export class CandidateModule {}

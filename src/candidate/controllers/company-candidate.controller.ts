@@ -19,10 +19,14 @@ import { PatchCandidateDto } from '../dto/patch-candidate.dto';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorator/roles.decorator';
 import { RoleUser } from '../../users/enum/roles.enums';
+import { CompanyCandidateService } from '../services/company-candidate.service';
 
 @Controller('companies')
 export class CompanyCandidateController {
-  constructor(private readonly candidateService: CandidateService) {}
+  constructor(
+    private readonly candidateService: CandidateService,
+    private readonly companyCandidateService: CompanyCandidateService,
+  ) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
@@ -100,5 +104,18 @@ export class CompanyCandidateController {
   @Delete(':companyId/candidates/candidateId')
   removeCandidate(@Param('candidateId') candidateId: string) {
     return this.candidateService.removeOne(candidateId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/accept')
+  acceptCandidateToStartProcess(
+    @Param('companyId') companyId: string,
+    @Param('candidateId') candidateId: string,
+  ) {
+    return this.companyCandidateService.acceptCandidateToStartRecruitment(
+      candidateId,
+      companyId,
+    );
   }
 }

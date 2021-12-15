@@ -139,8 +139,6 @@ export class StageService {
     companyId: string,
     stageId: string,
   ): Promise<ReadStageDto> {
-    console.log('🚀 | StageService | companyId', companyId);
-    console.log('🚀 | StageService | stageId', stageId);
     const stage = await this.stageModel
       .findOne({ _id: stageId, companyId })
       .populate({
@@ -162,5 +160,12 @@ export class StageService {
       .sort({ createdAt: 'desc' });
     if (stages.length === 0) throw new NotFoundException('Stages not found');
     return stages.map((stage) => plainToClass(ReadStageDto, stage));
+  }
+
+  getFirstStageScopedByCompany(companyId: string) {
+    return this.stageModel.findOne({
+      companyId,
+      previusStage: null,
+    });
   }
 }

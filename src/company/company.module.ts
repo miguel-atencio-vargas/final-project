@@ -28,6 +28,6 @@ import { CompanyStageController } from './controllers/stage/company-stage.contro
     StageController,
     CompanyStageController,
   ],
-  exports: [OpeningService],
+  exports: [OpeningService, StageService],
 })
 export class CompanyModule {}
