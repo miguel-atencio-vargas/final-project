@@ -3,22 +3,22 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { MailService } from './mail.service';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { MailController } from './mail.controller';
+import { environments } from '../config/enviroments';
 
 @Module({
   imports: [
     MailerModule.forRoot({
       transport: {
-        host: process.env.MAIL_HOST,
+        host: environments.MAIL_HOST,
         port: 465,
         secure: true,
         auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASSWORD,
+          user: environments.MAIL_USER,
+          pass: environments.MAIL_PASSWORD,
         },
       },
       defaults: {
-        from: process.env.MAIL_FROM,
+        from: environments.MAIL_FROM,
       },
       template: {
         dir: join(__dirname, 'templates'),
@@ -29,7 +29,6 @@ import { MailController } from './mail.controller';
       },
     }),
   ],
-  controllers: [MailController],
   providers: [MailService],
   exports: [MailService],
 })
