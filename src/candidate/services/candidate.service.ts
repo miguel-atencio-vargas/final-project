@@ -123,13 +123,57 @@ export class CandidateService {
   }
 
   /**
-   * @param id
+   * @param candidateId
    */
   async removeOne(candidateId: string): Promise<void> {
     const candidate = await this.candidateModel.findOneAndRemove({
       _id: candidateId,
     });
-    if (!candidate)
+    if (!candidate) {
       throw new NotFoundException(`Candidate with id ${candidateId} not found`);
+    }
+  }
+
+  /**
+   * @param companyId
+   * @param candidateId
+   * @returns a candidate scoped by company
+   */
+  async findOneScopedByCompany(
+    companyId: string,
+    candidateId: string,
+  ): Promise<ReadCandidateDto> {
+    const candidate: any = await this.candidateModel
+      .findById(candidateId)
+      .populate({ path: 'openingId', select: 'companyId' });
+    if (!candidate) {
+      throw new NotFoundException('Candidate not found');
+    }
+    if (candidate.openingId?.companyId !== companyId) {
+      throw new NotFoundException(
+        'Candidate was not applied on any opening of the company',
+      );
+    }
+    return plainToClass(ReadCandidateDto, candidate.depopulate('openingId'));
+  }
+
+  /**
+   * @param companyId
+   * @returns all candidates scoped by company
+   */
+  async getAllScopedByCompany(companyId: string): Promise<ReadCandidateDto[]> {
+    const candidates: any = await this.candidateModel
+      .find()
+      .sort({ createdAt: 'desc' })
+      .populate({ path: 'openingId', select: 'companyId' });
+    const candidatesScoped = candidates.filter(
+      (candidate) => candidate.openingId?.companyId === companyId,
+    );
+    if (candidatesScoped.length === 0) {
+      throw new NotFoundException('Candidates not found');
+    }
+    return candidatesScoped.map((candidate) =>
+      plainToClass(ReadCandidateDto, candidate.depopulate('openingId')),
+    );
   }
 }

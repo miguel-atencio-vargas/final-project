@@ -16,7 +16,7 @@ export class Opening {
   @Prop({ type: String, unique: true })
   description: string;
 
-  @Prop({ type: String, ref: Company.name })
+  @Prop({ type: String, ref: Company.name, required: true })
   companyId: string;
 }
 export const OpeningSchema = SchemaFactory.createForClass(Opening);

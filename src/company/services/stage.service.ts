@@ -21,7 +21,7 @@ export class StageService {
   /**
    *
    * @param createStageDto
-   * @returns a new stage created on db
+   * @returns the stage created
    */
   async create(
     companyId: string,
@@ -40,7 +40,6 @@ export class StageService {
         companyId,
         previusStage,
       });
-      // if create do not success its not gonna be update
       if (lastStage) {
         await this.stageModel.findByIdAndUpdate(lastStage._id, {
           nextStage: newStage._id,
@@ -55,8 +54,29 @@ export class StageService {
   /**
    *
    * @param stageId
+   * @returns a stage by id
+   */
+  async findOne(stageId: string): Promise<ReadStageDto> {
+    const stage = await this.stageModel.findById(stageId);
+    if (!stage) throw new NotFoundException('Stage not found');
+    return plainToClass(ReadStageDto, stage);
+  }
+
+  /**
+   *
+   * @returns all stages
+   */
+  async getAll(): Promise<ReadStageDto[]> {
+    const stages = await this.stageModel.find().sort({ createAt: 'desc' });
+    if (stages.length === 0) throw new NotFoundException('Stages not found');
+    return stages.map((stage) => plainToClass(ReadStageDto, stage));
+  }
+
+  /**
+   *
+   * @param stageId
    * @param putStageDto
-   * @returns an updated Stage
+   * @returns the stage updated
    */
   async updateOne(
     stageId: string,
@@ -75,30 +95,11 @@ export class StageService {
       throw new NotFoundException(error.message);
     }
   }
-  /**
-   *
-   * @param stageId
-   * @returns an stage searched by Id
-   */
-  async findOne(stageId: string): Promise<ReadStageDto> {
-    const stage = await this.stageModel.findById(stageId);
-    if (!stage) throw new NotFoundException();
-    return plainToClass(ReadStageDto, stage);
-  }
-  /**
-   *
-   * @returns all stages
-   */
-  async getAll(): Promise<ReadStageDto[]> {
-    const stages = await this.stageModel.find().sort({ createAt: 'desc' });
-    if (stages.length === 0) throw new NotFoundException();
 
-    return stages.map((stage) => plainToClass(ReadStageDto, stage));
-  }
   /**
    *
    * @param stageId
-   * deletes an stage searched by Id
+   * deletes a stage by id
    */
   async removeOne(stageId: string): Promise<void> {
     const stageToDel = await this.stageModel.findById(stageId);
@@ -108,20 +109,11 @@ export class StageService {
     const previusStage = stageToDel.previusStage;
     const nextStage = stageToDel.nextStage;
     if (nextStage && !previusStage) {
-      console.log('🚀 | StageService | removeOne | delete first');
       await this.stageModel.findByIdAndUpdate(nextStage, {
         previusStage: null,
       });
     }
-
-    if (!nextStage && previusStage) {
-      console.log('🚀 | StageService | removeOne | delete last');
-      await this.stageModel.findByIdAndUpdate(previusStage, {
-        nextStage: null,
-      });
-    }
     if (nextStage && previusStage) {
-      console.log('🚀 | StageService | removeOne | delete middle');
       await this.stageModel.findByIdAndUpdate(previusStage, {
         nextStage: nextStage,
       });
@@ -129,7 +121,51 @@ export class StageService {
         previusStage: previusStage,
       });
     }
-
+    if (!nextStage && previusStage) {
+      await this.stageModel.findByIdAndUpdate(previusStage, {
+        nextStage: null,
+      });
+    }
     await this.stageModel.findByIdAndRemove(stageId);
+  }
+
+  /**
+   * @param companyId
+   * @param stageId
+   * @returns returns a stage by id
+   * scoped by company
+   */
+  async findOneOnACompany(
+    companyId: string,
+    stageId: string,
+  ): Promise<ReadStageDto> {
+    const stage = await this.stageModel
+      .findOne({ _id: stageId, companyId })
+      .populate({
+        path: 'companyId',
+        select: 'name',
+      });
+    if (!stage) throw new NotFoundException('Stage not found');
+    return stage;
+  }
+
+  /**
+   *
+   * @param companyId
+   * @returns all stages scoped by company
+   */
+  async getAllByCompany(companyId: string) {
+    const stages = await this.stageModel
+      .find({ companyId })
+      .sort({ createdAt: 'desc' });
+    if (stages.length === 0) throw new NotFoundException('Stages not found');
+    return stages.map((stage) => plainToClass(ReadStageDto, stage));
+  }
+
+  async getFirstStageScopedByCompany(companyId: string) {
+    return this.stageModel.findOne({
+      companyId,
+      previusStage: null,
+    });
   }
 }

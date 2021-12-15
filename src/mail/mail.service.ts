@@ -1,20 +1,18 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { ConfigMailDto, ContextMailDto } from './dto/send-mail.dto';
 
 @Injectable()
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
-  async sendConfirmationEmail() {
-    await this.mailerService.sendMail({
-      to: 'ernesto1991diaz@gmail.com',
-      subject: 'Welcome to Node Trainee Program',
-      template: './rejected',
-      context: {
-        name: 'Miguel',
-        opening: 'Node js',
-      },
-
+  sendConfirmationEmail(
+    configMailDto: ConfigMailDto,
+    contextMailDto: ContextMailDto,
+  ) {
+    return this.mailerService.sendMail({
+      ...configMailDto,
+      context: contextMailDto,
       attachments: [
         {
           filename: 'image-1.png',
