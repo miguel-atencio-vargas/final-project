@@ -8,10 +8,12 @@ import { CandidateOpeningService } from './services/candidate-opening.service';
 import { CompanyModule } from '../company/company.module';
 import { CandidatesController } from './controllers/candidate.controller';
 import { CompanyCandidateService } from './services/company-candidate.service';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
     CompanyModule,
+    MailModule,
     MongooseModule.forFeature([
       {
         name: Candidate.name,

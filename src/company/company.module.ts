@@ -11,9 +11,11 @@ import { StageService } from './services/stage.service';
 import { StageController } from './controllers/stage/stage.controller';
 import { OpeningController } from './controllers/opening/opening.controller';
 import { CompanyStageController } from './controllers/stage/company-stage.controllers';
+import { MailService } from '../mail/mail.service';
 
 @Module({
   imports: [
+    MailService,
     MongooseModule.forFeature([
       { name: Company.name, schema: CompanySchema },
       { name: Opening.name, schema: OpeningSchema },

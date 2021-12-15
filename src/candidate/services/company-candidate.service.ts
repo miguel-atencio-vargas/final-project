@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { StageService } from '../../company/services/stage.service';
+import { MailService } from '../../mail/mail.service';
 import { ReadCandidateDto } from '../dto/read-candidate.dto';
 import { CandidateState } from '../enum/candidate-state.enum';
 import { Candidate, CandidateDocument } from '../schemas/candidate.schema';
@@ -17,6 +18,7 @@ export class CompanyCandidateService {
     @InjectModel(Candidate.name)
     private candidateModel: Model<CandidateDocument>,
     private readonly stageService: StageService,
+    private readonly mailService: MailService,
   ) {}
 
   async acceptCandidateToStartRecruitment(
@@ -51,7 +53,6 @@ export class CompanyCandidateService {
       { stageId: firstStage._id },
       { new: true },
     );
-
     return plainToClass(ReadCandidateDto, candidateUpdated);
   }
 }

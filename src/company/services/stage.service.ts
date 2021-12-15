@@ -162,7 +162,7 @@ export class StageService {
     return stages.map((stage) => plainToClass(ReadStageDto, stage));
   }
 
-  getFirstStageScopedByCompany(companyId: string) {
+  async getFirstStageScopedByCompany(companyId: string) {
     return this.stageModel.findOne({
       companyId,
       previusStage: null,
