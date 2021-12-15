@@ -10,16 +10,16 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Roles } from '../../auth/decorator/roles.decorator';
-import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../../auth/guards/roles.guard';
-import { RoleUser } from '../../users/enum/roles.enums';
-import { CreateStageDto } from '../dto/stage/create-stage.dto';
-import { PutStageDto } from '../dto/stage/update-stage.dto';
-import { StageService } from '../services/stage.service';
+import { Roles } from '../../../auth/decorator/roles.decorator';
+import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../../auth/guards/roles.guard';
+import { RoleUser } from '../../../users/enum/roles.enums';
+import { CreateStageDto } from '../../dto/stage/create-stage.dto';
+import { PutStageDto } from '../../dto/stage/update-stage.dto';
+import { StageService } from '../../services/stage.service';
 
 @Controller('companies')
-export class StageController {
+export class CompanyStageController {
   constructor(private readonly stageService: StageService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,8 +40,11 @@ export class StageController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Get(':companyId/stages/:stageId')
-  getStageById(@Param('stageId') stageId: string) {
-    return this.stageService.findOne(stageId);
+  getStageByIdOnCompany(
+    @Param('companyId') companyId: string,
+    @Param('stageId') stageId: string,
+  ) {
+    return this.stageService.findOneOnACompany(companyId, stageId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -51,13 +54,13 @@ export class StageController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Get(':companyId/stages')
-  getStages() {
-    return this.stageService.getAll();
+  getStagesScopedByCompany(@Param('companyId') companyId: string) {
+    return this.stageService.getAllByCompany(companyId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
-  @Put(':companyId/stages:/stageId')
+  @Put(':companyId/stages/:stageId')
   updateStage(
     @Param('stageId') stageId: string,
     @Body() putStageDto: PutStageDto,

@@ -8,8 +8,9 @@ import { CompanyOpeningController } from './controllers/opening/company-opening.
 import { Opening, OpeningSchema } from './schemas/opening.schema';
 import { Stage, StageSchema } from './schemas/stage.schema';
 import { StageService } from './services/stage.service';
-import { StageController } from './controllers/stage.controller';
+import { StageController } from './controllers/stage/stage.controller';
 import { OpeningController } from './controllers/opening/opening.controller';
+import { CompanyStageController } from './controllers/stage/company-stage.controllers';
 
 @Module({
   imports: [
@@ -22,9 +23,10 @@ import { OpeningController } from './controllers/opening/opening.controller';
   providers: [CompanyService, OpeningService, StageService],
   controllers: [
     CompanyController,
-    CompanyOpeningController,
     OpeningController,
+    CompanyOpeningController,
     StageController,
+    CompanyStageController,
   ],
   exports: [OpeningService],
 })

@@ -3,23 +3,23 @@ import { Roles } from '../../../auth/decorator/roles.decorator';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../auth/guards/roles.guard';
 import { RoleUser } from '../../../users/enum/roles.enums';
-import { OpeningService } from '../../services/opening.service';
+import { StageService } from '../../services/stage.service';
 
-@Controller('openings')
-export class OpeningController {
-  constructor(private readonly openingService: OpeningService) {}
+@Controller('stages')
+export class StageController {
+  constructor(private readonly stageService: StageService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN)
   @Get()
-  getOpenings() {
-    return this.openingService.getAll();
+  getStages() {
+    return this.stageService.getAll();
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN)
-  @Get('/:openingId')
-  getOpeningById(@Param('openingId') openingId: string) {
-    return this.openingService.findOne(openingId);
+  @Get(':stageId')
+  getStageById(@Param('stageId') stageId: string) {
+    return this.stageService.findOne(stageId);
   }
 }

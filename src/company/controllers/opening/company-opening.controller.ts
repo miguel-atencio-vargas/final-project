@@ -24,9 +24,9 @@ export class CompanyOpeningController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
-  @Post()
+  @Post(':companyId/openings')
   newOpening(
-    @Param(':companyId/companyId') companyId: string,
+    @Param('companyId') companyId: string,
     @Body() createOpeningDto: CreateOpeningDto,
   ) {
     return this.openingService.create(companyId, createOpeningDto);

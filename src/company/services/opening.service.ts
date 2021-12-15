@@ -17,11 +17,12 @@ export class OpeningService {
   constructor(
     @InjectModel(Opening.name) private openingModel: Model<OpeningDocument>,
   ) {}
+
   /**
    *
    * @param companyId
    * @param createOpeningDto
-   * @returns a new opening created
+   * @returns the opening created
    */
   async create(
     companyId: string,
@@ -42,27 +43,34 @@ export class OpeningService {
 
   /**
    *
-   * @returns all openings in the Database
+   * @param openingID
+   * @returns an opening searched by Id
+   */
+  async findOne(openingId: string): Promise<ReadOpeningDto> {
+    const opening = await this.openingModel
+      .findById(openingId)
+      .populate({
+        path: 'companyId',
+        select: 'name',
+      })
+      .exec();
+    if (!opening) {
+      throw new NotFoundException('Opening not found');
+    }
+    return opening;
+  }
+
+  /**
+   *
+   * @returns all openings in the db
    * by the creation date
    */
   async getAll(): Promise<ReadOpeningDto[]> {
     const openings = await this.openingModel.find().sort({ createdAt: 'desc' });
-    if (openings.length === 0) throw new NotFoundException();
+    if (openings.length === 0) {
+      throw new NotFoundException('Opening not found');
+    }
 
-    return openings.map((opening) => plainToClass(ReadOpeningDto, opening));
-  }
-
-  /**
-   * @param companyId
-   * @returns all openings scoped by company
-   * by the creation date
-   */
-  async getAllByCompany(companyId: string): Promise<ReadOpeningDto[]> {
-    const openings = await this.openingModel
-      .find({ companyId })
-      .sort({ createdAt: 'desc' });
-    if (openings.length === 0)
-      throw new NotFoundException('Openings not found');
     return openings.map((opening) => plainToClass(ReadOpeningDto, opening));
   }
 
@@ -82,8 +90,9 @@ export class OpeningService {
         putOpeningDto,
         { new: true },
       );
-      if (!openingId)
-        throw new NotFoundException(`Company with id ${openingId} not found`);
+      if (!openingId) {
+        throw new NotFoundException(`Company not found`);
+      }
       return plainToClass(ReadOpeningDto, openingUpdated);
     } catch (error) {
       throw new NotFoundException(error.message);
@@ -92,25 +101,39 @@ export class OpeningService {
 
   /**
    *
-   * @param openingID
-   * @returns an opening searched by Id
+   * @param openingId
+   * deletes an opening by id
    */
-  async findOne(openingId: string): Promise<ReadOpeningDto> {
-    const opening = await this.openingModel
-      .findById(openingId)
-      .populate({
-        path: 'companyId',
-        select: 'name',
-      })
-      .exec();
-    if (!opening) throw new NotFoundException('Opening not found');
-    return opening;
+  async removeOne(openingId: string): Promise<void> {
+    const opening = await this.openingModel.findOneAndRemove({
+      _id: openingId,
+    });
+    if (!opening) {
+      throw new NotFoundException(`opening with id ${openingId} not found`);
+    }
+  }
+
+  /**
+   *
+   * @param companyId
+   * @returns all openings scoped by company
+   * by the creation date
+   */
+  async getAllByCompany(companyId: string): Promise<ReadOpeningDto[]> {
+    const openings = await this.openingModel
+      .find({ companyId })
+      .sort({ createdAt: 'desc' });
+    if (openings.length === 0) {
+      throw new NotFoundException('Openings not found');
+    }
+    return openings.map((opening) => plainToClass(ReadOpeningDto, opening));
   }
 
   /**
    *
    * @param openingID
-   * @returns an opening searched by Id
+   * @param companyId
+   * @returns a stage by id and scoped by company
    */
   async findOneOnACompany(
     openingId: string,
@@ -125,18 +148,5 @@ export class OpeningService {
       .exec();
     if (!opening) throw new NotFoundException('Opening not found');
     return opening;
-  }
-
-  /**
-   *
-   * @param openingId
-   * deletes an opening searched by Id
-   */
-  async removeOne(openingId: string): Promise<void> {
-    const opening = await this.openingModel.findOneAndRemove({
-      _id: openingId,
-    });
-    if (!opening)
-      throw new NotFoundException(`opening with id ${openingId} not found`);
   }
 }
