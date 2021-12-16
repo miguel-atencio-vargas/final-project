@@ -1,4 +1,4 @@
-import { TypeTemplateEmail } from '../enum/type-mail.enum';
+import { TemplateEmail } from '../enum/type-mail.enum';
 
 /**
  *  @property to email to be sended
@@ -9,7 +9,7 @@ export class ConfigMailDto {
   constructor(
     private to: string,
     private subject: string,
-    private template: TypeTemplateEmail,
+    private template: TemplateEmail,
   ) {}
 }
 

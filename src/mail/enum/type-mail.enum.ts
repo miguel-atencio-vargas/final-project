@@ -1,4 +1,5 @@
-export enum TypeTemplateEmail {
-  ACCEPTED_TEMPLATE = './acceptCandidate',
-  APPROVED_TEMPLATE = './approvedCandidate',
+export enum TemplateEmail {
+  ACCEPTED = './accepted',
+  APPROVED = './approved',
+  REJECTED = './rejected',
 }
