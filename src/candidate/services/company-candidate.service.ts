@@ -117,4 +117,29 @@ export class CompanyCandidateService {
     candidate.depopulate('stageId openingId');
     return plainToClass(ReadCandidateDto, candidate);
   }
+
+  async levelUpCandidate(candidateId: string) {
+    const candidate: any = await this.candidateModel.findById(candidateId);
+    if (!candidate) {
+      throw new NotFoundException('Candidate not found');
+    }
+    const isCandidateOnWorkflow = !Object.values(CandidateState).includes(
+      candidate.stageId,
+    );
+    if (!isCandidateOnWorkflow) {
+      throw new UnprocessableEntityException(
+        'This candidate is not on a recruitment workflow',
+      );
+    }
+    await candidate.populate('stageId');
+    const stage = candidate.stageId;
+    return this.candidateModel.findByIdAndUpdate(
+      candidateId,
+      {
+        stageId:
+          stage.nextStage === null ? CandidateState.ACCEPTED : stage.nextStage,
+      },
+      { new: true },
+    );
+  }
 }

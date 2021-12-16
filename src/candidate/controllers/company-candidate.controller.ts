@@ -125,4 +125,11 @@ export class CompanyCandidateController {
   notifyTheStatusOfCandidateProcess(@Param('candidateId') candidateId: string) {
     return this.companyCandidateService.notifyStatus(candidateId);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/levelup')
+  levelUpStageOfCandidate(@Param('candidateId') candidateId: string) {
+    return this.companyCandidateService.levelUpCandidate(candidateId);
+  }
 }
