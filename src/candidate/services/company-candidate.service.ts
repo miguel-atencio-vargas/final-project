@@ -123,12 +123,17 @@ export class CompanyCandidateService {
     if (!candidate) {
       throw new NotFoundException('Candidate not found');
     }
+    if (!candidate.stageId) {
+      throw new UnprocessableEntityException(
+        'This candidate has not been applied to an opening',
+      );
+    }
     const isCandidateOnWorkflow = !Object.values(CandidateState).includes(
       candidate.stageId,
     );
     if (!isCandidateOnWorkflow) {
       throw new UnprocessableEntityException(
-        'This candidate is not on a recruitment workflow',
+        `This candidate is on ${candidate.stageId} status`,
       );
     }
     await candidate.populate('stageId');
@@ -139,6 +144,31 @@ export class CompanyCandidateService {
         stageId:
           stage.nextStage === null ? CandidateState.ACCEPTED : stage.nextStage,
       },
+      { new: true },
+    );
+  }
+
+  async rejectCandidate(candidateId: string) {
+    const candidate: any = await this.candidateModel.findById(candidateId);
+    if (!candidate) {
+      throw new NotFoundException('Candidate not found');
+    }
+    if (!candidate.stageId) {
+      throw new UnprocessableEntityException(
+        'This candidate has not been applied to an opening',
+      );
+    }
+    const isCandidateOnWorkflow = !Object.values(CandidateState).includes(
+      candidate.stageId,
+    );
+    if (!isCandidateOnWorkflow) {
+      throw new UnprocessableEntityException(
+        `This candidate is on ${candidate.stageId} status`,
+      );
+    }
+    return this.candidateModel.findByIdAndUpdate(
+      candidateId,
+      { stageId: CandidateState.REJECTED },
       { new: true },
     );
   }

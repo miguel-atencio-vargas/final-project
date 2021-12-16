@@ -132,4 +132,11 @@ export class CompanyCandidateController {
   levelUpStageOfCandidate(@Param('candidateId') candidateId: string) {
     return this.companyCandidateService.levelUpCandidate(candidateId);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/reject')
+  rejectCandidate(@Param('candidateId') candidateId: string) {
+    return this.companyCandidateService.rejectCandidate(candidateId);
+  }
 }
