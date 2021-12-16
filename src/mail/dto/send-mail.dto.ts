@@ -14,9 +14,9 @@ export class ConfigMailDto {
 }
 
 /**
- *  @property name its the formal name of the content of the email
- *  @property opening that will be appear in the email
+ *  @property candidateName its the formal name of the content of the email
+ *  @property openingTitle that will be appear in the email
  */
 export class ContextMailDto {
-  constructor(private name: string, private opening: string) {}
+  constructor(private candidateName: string, private openingTitle: string) {}
 }

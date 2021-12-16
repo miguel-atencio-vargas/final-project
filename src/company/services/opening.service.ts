@@ -144,8 +144,7 @@ export class OpeningService {
       .populate({
         path: 'companyId',
         select: 'name',
-      })
-      .exec();
+      });
     if (!opening) throw new NotFoundException('Opening not found');
     return opening;
   }
