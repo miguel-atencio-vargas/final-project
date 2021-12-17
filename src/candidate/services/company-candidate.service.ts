@@ -6,6 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
+import { OpeningService } from '../../company/services/opening.service';
 import { StageService } from '../../company/services/stage.service';
 import { ConfigMailDto, ContextMailDto } from '../../mail/dto/send-mail.dto';
 import { TemplateEmail } from '../../mail/enum/type-mail.enum';
@@ -21,6 +22,7 @@ export class CompanyCandidateService {
     private candidateModel: Model<CandidateDocument>,
     private readonly stageService: StageService,
     private readonly mailService: MailService,
+    private readonly openingService: OpeningService,
   ) {}
 
   async acceptCandidateToStartRecruitment(
@@ -171,5 +173,44 @@ export class CompanyCandidateService {
       { stageId: CandidateState.REJECTED },
       { new: true },
     );
+  }
+
+  async getStatus(candidateId: string, companyId: string) {
+    const candidate: any = await this.candidateModel.findById(candidateId);
+    if (!candidate) {
+      throw new NotFoundException('Candiadate not found');
+    }
+    if (!candidate.stageId || !candidate.openingId) {
+      return {
+        candidate: `${candidate.firstName} ${candidate.lastName}`,
+        candidateEmail: candidate.email,
+        status: `This candidate has not been applied no any opening`,
+      };
+    }
+    const opening: any = await this.openingService.findOneOnACompany(
+      candidate.openingId,
+      companyId,
+    );
+    const isCandidateOnWorkflow = !Object.values(CandidateState).includes(
+      candidate.stageId,
+    );
+    if (!isCandidateOnWorkflow) {
+      return {
+        candidate: `${candidate.firstName} ${candidate.lastName}`,
+        candidateEmail: candidate.email,
+        status: `Candidate is in ${candidate.stageId} status`,
+        opening: opening.name,
+        company: opening.companyId.name,
+      };
+    }
+
+    await candidate.populate('stageId');
+    return {
+      candidate: `${candidate.firstName} ${candidate.lastName}`,
+      candidateEmail: candidate.email,
+      company: opening.companyId.name,
+      opening: opening.name,
+      stage: candidate.stageId.title,
+    };
   }
 }

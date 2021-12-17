@@ -139,4 +139,14 @@ export class CompanyCandidateController {
   rejectCandidate(@Param('candidateId') candidateId: string) {
     return this.companyCandidateService.rejectCandidate(candidateId);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Get(':companyId/candidates/:candidateId/status')
+  getCandidateStatus(
+    @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
+  ) {
+    return this.companyCandidateService.getStatus(candidateId, companyId);
+  }
 }
