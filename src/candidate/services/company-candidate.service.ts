@@ -191,6 +191,9 @@ export class CompanyCandidateService {
       candidate.openingId,
       companyId,
     );
+    if (companyId !== opening.companyId) {
+      throw new NotFoundException('Candidate not found');
+    }
     const isCandidateOnWorkflow = !Object.values(CandidateState).includes(
       candidate.stageId,
     );
