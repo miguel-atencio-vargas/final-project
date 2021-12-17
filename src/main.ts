@@ -11,7 +11,6 @@ async function bootstrap() {
     .setTitle('Recruit API')
     .setDescription('API for recruiting management')
     .setVersion('1.0')
-    .addTag('recruit')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

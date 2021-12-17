@@ -14,12 +14,10 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 
 @ApiTags('authorization')
-@ApiSecurity('Google Token')
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
