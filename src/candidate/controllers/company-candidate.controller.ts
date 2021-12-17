@@ -118,4 +118,35 @@ export class CompanyCandidateController {
       companyId,
     );
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/notify')
+  notifyTheStatusOfCandidateProcess(@Param('candidateId') candidateId: string) {
+    return this.companyCandidateService.notifyStatus(candidateId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/levelup')
+  levelUpStageOfCandidate(@Param('candidateId') candidateId: string) {
+    return this.companyCandidateService.levelUpCandidate(candidateId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Post(':companyId/candidates/:candidateId/reject')
+  rejectCandidate(@Param('candidateId') candidateId: string) {
+    return this.companyCandidateService.rejectCandidate(candidateId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
+  @Get(':companyId/candidates/:candidateId/status')
+  getCandidateStatus(
+    @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
+  ) {
+    return this.companyCandidateService.getStatus(candidateId, companyId);
+  }
 }

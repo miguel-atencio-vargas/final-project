@@ -135,15 +135,12 @@ export class StageService {
    * @returns returns a stage by id
    * scoped by company
    */
-  async findOneOnACompany(
-    companyId: string,
-    stageId: string,
-  ): Promise<ReadStageDto> {
+  async findOneOnACompany(companyId: string, stageId: string): Promise<Stage> {
     const stage = await this.stageModel
       .findOne({ _id: stageId, companyId })
       .populate({
         path: 'companyId',
-        select: 'name',
+        select: 'name previusStage nextStage',
       });
     if (!stage) throw new NotFoundException('Stage not found');
     return stage;
