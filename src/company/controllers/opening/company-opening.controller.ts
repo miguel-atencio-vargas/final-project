@@ -24,7 +24,7 @@ import { OpeningService } from '../../services/opening.service';
 export class CompanyOpeningController {
   constructor(private readonly openingService: OpeningService) {}
 
-  @ApiOperation({ summary: 'Creates a new opening' })
+  @ApiOperation({ summary: 'Creates a new Opening' })
   @ApiResponse({
     status: 201,
     description: 'New opening created',
