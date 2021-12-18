@@ -11,11 +11,12 @@ import { StageService } from './services/stage.service';
 import { StageController } from './controllers/stage/stage.controller';
 import { OpeningController } from './controllers/opening/opening.controller';
 import { CompanyStageController } from './controllers/stage/company-stage.controllers';
-import { MailService } from '../mail/mail.service';
+
+import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
-    MailService,
+    MailModule,
     MongooseModule.forFeature([
       { name: Company.name, schema: CompanySchema },
       { name: Opening.name, schema: OpeningSchema },
@@ -25,11 +26,11 @@ import { MailService } from '../mail/mail.service';
   providers: [CompanyService, OpeningService, StageService],
   controllers: [
     CompanyController,
+    StageController,
     OpeningController,
     CompanyOpeningController,
-    StageController,
     CompanyStageController,
   ],
-  exports: [OpeningService, StageService],
+  exports: [OpeningService, StageService, CompanyService],
 })
 export class CompanyModule {}
