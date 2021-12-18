@@ -1,4 +1,13 @@
-import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Roles } from '../auth/decorator/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -13,7 +22,7 @@ export class CompanyReportController {
   @Roles(RoleUser.COMPANY_RECRUITER)
   @Post(':companyId/reports')
   createReport(@Param('companyId') companyId: string, @Req() { user }) {
-    this.reportService.createOne(companyId, user.email);
+    return this.reportService.createOne(companyId, user.email);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -24,5 +33,20 @@ export class CompanyReportController {
     @Param('reportId') reportId: string,
   ) {
     return this.reportService.findOneOnCompany(reportId, companyId);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleUser.COMPANY_ADMIN)
+  @Get(':companyId/reports/:reportId/stages/:stageId')
+  getReportByStage(
+    @Param('companyId') companyId: string,
+    @Param('reportId') reportId: string,
+    @Param('stageId') stageId: string,
+  ) {
+    return this.reportService.findOneByStageOnCompany(
+      reportId,
+      companyId,
+      stageId,
+    );
   }
 }

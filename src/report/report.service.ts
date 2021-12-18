@@ -77,4 +77,16 @@ export class ReportService {
     }
     return report;
   }
+
+  async findOneByStageOnCompany(
+    reportId: string,
+    companyId: string,
+    stageId: string,
+  ) {
+    const report = await this.reportModel.findOne({ _id: reportId, companyId });
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+    return report.stages.filter((stage: any) => stage.stageId === stageId);
+  }
 }
