@@ -67,7 +67,9 @@ export class CompanyService {
    */
   async findOne(companyId: string): Promise<ReadCompanyDto> {
     const company = await this.companyModel.findById(companyId);
-    if (!company) throw new NotFoundException();
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
     return plainToClass(ReadCompanyDto, company);
   }
 

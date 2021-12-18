@@ -7,6 +7,7 @@ import { environments } from './config/enviroments';
 import { CompanyModule } from './company/company.module';
 import { UserModule } from './users/user.module';
 import { MailModule } from './mail/mail.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MailModule } from './mail/mail.module';
     UserModule,
     CandidateModule,
     MailModule,
+    ReportModule,
   ],
 })
 export class AppModule {}
