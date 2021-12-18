@@ -19,7 +19,7 @@ export class Candidate {
   @Prop({ type: String })
   lastName: string;
 
-  @Prop({ type: String, unique: true })
+  @Prop({ type: String })
   uid: string;
 
   @Prop({ type: String, default: null, ref: Opening.name })
