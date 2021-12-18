@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { nanoid } from 'nanoid';
@@ -68,5 +68,13 @@ export class ReportService {
       }),
     };
     return this.reportModel.create(newReport);
+  }
+
+  async findOneOnCompany(reportId: string, companyId: string) {
+    const report = await this.reportModel.findOne({ _id: reportId, companyId });
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+    return report;
   }
 }
