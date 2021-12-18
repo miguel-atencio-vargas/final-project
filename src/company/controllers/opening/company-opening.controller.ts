@@ -10,6 +10,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../../auth/decorator/roles.decorator';
 import { JwtAuthGuard } from '../../../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../../auth/guards/roles.guard';
@@ -18,10 +19,17 @@ import { CreateOpeningDto } from '../../dto/opening/create-opening.dto';
 import { PutOpeningDto } from '../../dto/opening/put-opening.dto';
 import { OpeningService } from '../../services/opening.service';
 
+@ApiTags('companies')
 @Controller('companies')
 export class CompanyOpeningController {
   constructor(private readonly openingService: OpeningService) {}
 
+  @ApiOperation({ summary: 'Creates a new Opening' })
+  @ApiResponse({
+    status: 201,
+    description: 'New opening created',
+    type: CreateOpeningDto,
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
   @Post(':companyId/openings')
@@ -32,6 +40,11 @@ export class CompanyOpeningController {
     return this.openingService.create(companyId, createOpeningDto);
   }
 
+  @ApiOperation({ summary: 'Returns all openings by Company' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of openings found',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -43,6 +56,11 @@ export class CompanyOpeningController {
     return this.openingService.getAllByCompany(companyId);
   }
 
+  @ApiOperation({ summary: 'Return an specified opening by Company' })
+  @ApiResponse({
+    status: 200,
+    description: 'Opening found',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -57,6 +75,12 @@ export class CompanyOpeningController {
     return this.openingService.findOneOnACompany(openingId, companyId);
   }
 
+  @ApiOperation({ summary: 'Updates an specified opening' })
+  @ApiResponse({
+    status: 201,
+    description: 'Opening has been updated',
+    type: PutOpeningDto,
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
   @Put(':openingId/companies/:companyId')
@@ -67,6 +91,11 @@ export class CompanyOpeningController {
     return this.openingService.updateOne(openingId, patchOpeningDto);
   }
 
+  @ApiOperation({ summary: 'Deletes an opening' })
+  @ApiResponse({
+    status: 200,
+    description: 'Opening has been deleted',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':openingId/companies/:companyId')
   removeOpening(@Param('companyId') companyId: string) {

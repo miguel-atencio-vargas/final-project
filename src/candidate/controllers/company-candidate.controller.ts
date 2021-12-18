@@ -20,7 +20,13 @@ import { RolesGuard } from '../../auth/guards/roles.guard';
 import { Roles } from '../../auth/decorator/roles.decorator';
 import { RoleUser } from '../../users/enum/roles.enums';
 import { CompanyCandidateService } from '../services/company-candidate.service';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 
+@ApiResponse({
+  status: 403,
+  description: 'Forbidden',
+})
+@ApiTags('companies')
 @Controller('companies')
 export class CompanyCandidateController {
   constructor(
@@ -28,6 +34,12 @@ export class CompanyCandidateController {
     private readonly companyCandidateService: CompanyCandidateService,
   ) {}
 
+  @ApiOperation({ summary: 'Creates a new Candidate' })
+  @ApiResponse({
+    status: 200,
+    description: 'New candidate created',
+    type: CreateCandidateDto,
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -38,7 +50,19 @@ export class CompanyCandidateController {
   newCandidate(@Body() createCandidateDto: CreateCandidateDto) {
     return this.candidateService.create(createCandidateDto);
   }
-
+  @ApiOperation({ summary: 'Get candiadate by Id' })
+  @ApiParam({
+    name: 'candidateId',
+    description: 'Id for a candidate saved in the DB',
+  })
+  @ApiParam({
+    name: 'companyId',
+    description: 'Id for a company saved in the DB',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Retrieve a candidate searched by a provided id',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -54,6 +78,11 @@ export class CompanyCandidateController {
     return this.candidateService.findOneScopedByCompany(companyId, candidateId);
   }
 
+  @ApiOperation({ summary: 'Return candidates by Company Scope' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of candidates found',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -66,6 +95,12 @@ export class CompanyCandidateController {
     return this.candidateService.getAllScopedByCompany(companyId);
   }
 
+  @ApiOperation({ summary: 'Updates a candidate from the DB' })
+  @ApiResponse({
+    status: 201,
+    description: 'Candidate has been updated',
+    type: PutCandidateDto,
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -80,6 +115,12 @@ export class CompanyCandidateController {
     return this.candidateService.updateOne(candidateId, putCandidateDto);
   }
 
+  @ApiOperation({ summary: 'Updates a candidate from the DB' })
+  @ApiResponse({
+    status: 204,
+    description: 'Candidate has been updatedd',
+    type: PatchCandidateDto,
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -94,6 +135,11 @@ export class CompanyCandidateController {
     return this.candidateService.patchOne(candidateId, patchCandidateDto);
   }
 
+  @ApiOperation({ summary: 'Deletes a candidate from the DB' })
+  @ApiResponse({
+    status: 202,
+    description: 'Candidate has been deleted',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(
     RoleUser.SUDO_ADMIN,
@@ -106,6 +152,11 @@ export class CompanyCandidateController {
     return this.candidateService.removeOne(candidateId);
   }
 
+  @ApiOperation({ summary: 'Set the status of a candidate as accepted' })
+  @ApiResponse({
+    status: 200,
+    description: 'Candidate has been accepted',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
   @Post(':companyId/candidates/:candidateId/accept')
@@ -118,7 +169,11 @@ export class CompanyCandidateController {
       companyId,
     );
   }
-
+  @ApiOperation({ summary: 'Sent the status of a candidate by email' })
+  @ApiResponse({
+    status: 200,
+    description: 'Email sent to candidate',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
   @Post(':companyId/candidates/:candidateId/notify')
@@ -126,13 +181,22 @@ export class CompanyCandidateController {
     return this.companyCandidateService.notifyStatus(candidateId);
   }
 
+  @ApiOperation({ summary: 'Level up the current stage for a candidate' })
+  @ApiResponse({
+    status: 200,
+    description: 'Candidate stage updated',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
   @Post(':companyId/candidates/:candidateId/levelup')
   levelUpStageOfCandidate(@Param('candidateId') candidateId: string) {
     return this.companyCandidateService.levelUpCandidate(candidateId);
   }
-
+  @ApiOperation({ summary: 'Set the status of a candidate as rejected' })
+  @ApiResponse({
+    status: 200,
+    description: 'Candidate status updated as rejected',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
   @Post(':companyId/candidates/:candidateId/reject')
@@ -140,6 +204,11 @@ export class CompanyCandidateController {
     return this.companyCandidateService.rejectCandidate(candidateId);
   }
 
+  @ApiOperation({ summary: 'Get the status of a candidate' })
+  @ApiResponse({
+    status: 200,
+    description: 'Retrieve a candidate with his current status',
+  })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.COMPANY_ADMIN, RoleUser.COMPANY_RECRUITER)
   @Get(':companyId/candidates/:candidateId/status')

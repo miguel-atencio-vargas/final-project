@@ -1,18 +1,24 @@
-import { IsString, IsEmail, IsNumber } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsEmail } from 'class-validator';
 
 export class PutUserDto {
+  @ApiProperty()
   @IsString()
   firstName: string;
 
+  @ApiProperty()
   @IsString()
   lastName: string;
 
+  @ApiProperty()
   @IsEmail()
   email: string;
 
-  @IsNumber()
-  role: number;
+  @ApiProperty()
+  @IsString()
+  role: string;
 
-  @IsNumber()
-  companyId: number;
+  @ApiProperty()
+  @IsString()
+  companyId: string;
 }
