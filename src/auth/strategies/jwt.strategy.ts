@@ -5,6 +5,7 @@ import { CandidateService } from '../../candidate/services/candidate.service';
 
 import { UserService } from '../../users/user.service';
 import { JtiService } from '../services/jti.service';
+import { environments } from '../../config/enviroments';
 
 @Injectable()
 export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
@@ -16,7 +17,7 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: environments.JWT_SECRET,
     });
   }
 
