@@ -29,7 +29,9 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
    */
   async validate(payload) {
     const outUser = await this.tokenService.getTokenByJti(payload.jti);
-    if (outUser) throw new UnauthorizedException('This token was invalidated');
+    if (outUser) {
+      throw new UnauthorizedException('This token was invalidated');
+    }
     const candidate = await this.candidateService.findOneByEmail(payload.email);
     if (candidate) {
       return {
@@ -40,6 +42,7 @@ export class JwtStrategyService extends PassportStrategy(Strategy, 'jwt') {
       };
     }
     const user = await this.userService.findOneByEmail(payload.email);
+    if (!user) return;
     return {
       jti: payload.jti,
       _id: user._id,
