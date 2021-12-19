@@ -37,5 +37,6 @@ lerna-debug.log*
 launch.json
 
 # Enviroment variables
-.env
+.env.dev
+.env.prod
 
