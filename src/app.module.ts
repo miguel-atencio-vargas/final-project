@@ -12,7 +12,7 @@ import { ReportModule } from './report/report.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(environments.mongoUri),
+    MongooseModule.forRoot(environments.MONGO_URI),
     AuthModule,
     CompanyModule,
     UserModule,
