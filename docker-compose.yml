@@ -5,12 +5,12 @@ services:
     container_name: main
     build:
       context: .
-      target: development
+      target: production
     volumes:
       - .:/usr/src/app
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
-      - 9229:9229
-    command: npm run start:debug
+
+    command: npm run start:dev
     env_file:
       - .env
