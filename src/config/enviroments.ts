@@ -9,7 +9,7 @@ const mongoUri =
   env.ENVIRONMENT === 'DEVELOPMENT'
     ? `mongodb://${credentials}${env.MONGO_HOST}:${env.MONGO_PORT}/${env.MONGO_DATABASE_NAME}`
     : env.MONGO_URI;
-
+console.log(process.env.ENVIRONMENT);
 export const environments = {
   port: Number(env.PORT || 3000),
   mongoUri,
