@@ -1,18 +1,26 @@
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { OpeningService } from './opening.service';
+import { Opening } from '../schemas/opening.schema';
+import { OpeningService } from '../services/opening.service';
 
 describe('OpeningService', () => {
-  let service: OpeningService;
+  let openingService: OpeningService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [OpeningService],
+    const moduleRef: TestingModule = await Test.createTestingModule({
+      providers: [
+        OpeningService,
+        {
+          provide: getModelToken(Opening.name),
+          useValue: {},
+        },
+      ],
     }).compile();
 
-    service = module.get<OpeningService>(OpeningService);
+    openingService = moduleRef.get<OpeningService>(OpeningService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(openingService).toBeDefined();
   });
 });
