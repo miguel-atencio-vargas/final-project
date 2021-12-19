@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { CreateCompanyUserDto } from '../dto/create-company-user.dto';
 import { CreateSudoUserDto } from '../dto/create-sudo-user.dto';
 import { PutUserDto } from '../dto/put-user.dto';
 import { ReadUserDto } from '../dto/read-user.dto';
+import { RoleUser } from '../enum/roles.enums';
 import { UserController } from '../user.controller';
 import { UserService } from '../user.service';
 
@@ -53,21 +55,41 @@ describe('UserController', () => {
     });
   });
 
-  describe('createUser()', () => {
-    const customerToCreate: CreateSudoUserDto = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      permissionFlags: 0,
-      companyId: 0,
+  describe('newSudoAdmin()', () => {
+    const sudoAdminToCreate: CreateSudoUserDto = {
+      firstName: 'sudo',
+      lastName: 'admin',
+      email: 'sudo@gmail.com',
     };
-    it('should return a new user', () => {
+    it('should return a new sudo admin', () => {
       jest.spyOn(userService, 'create').mockResolvedValue(new ReadUserDto());
-      expect(userController.newUser(customerToCreate)).resolves.toBeInstanceOf(
-        ReadUserDto,
+      expect(
+        userController.newSudoAdmin(sudoAdminToCreate),
+      ).resolves.toBeInstanceOf(ReadUserDto);
+      expect(userService.create).toBeCalledWith(
+        sudoAdminToCreate,
+        RoleUser.SUDO_ADMIN,
       );
-      expect(userService.create).toBeCalledWith<CreateSudoUserDto[]>(
-        customerToCreate,
+    });
+  });
+
+  describe('newCompanyUser()', () => {
+    const companyAdminToCreate: CreateCompanyUserDto = {
+      firstName: 'company',
+      lastName: 'admin',
+      email: 'companyAdmin@gmail.com',
+      roleEnum: RoleUser.COMPANY_ADMIN,
+    };
+    const companyId = '6We5djCFJ71K2oqrZlsP-';
+    it('should create a company user', () => {
+      jest.spyOn(userService, 'create').mockResolvedValue(new ReadUserDto());
+      expect(
+        userController.newCompanyUser(companyId, companyAdminToCreate),
+      ).resolves.toBeInstanceOf(ReadUserDto);
+      expect(userService.create).toBeCalledWith(
+        companyAdminToCreate,
+        companyAdminToCreate.roleEnum,
+        companyId,
       );
     });
   });
