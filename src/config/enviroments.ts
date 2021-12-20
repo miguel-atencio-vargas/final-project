@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 config({ path: `.env.${process.env.ENVIRONMENT}` });
 const { env } = process;
 
-console.log(process.env.ENVIRONMENT);
 export const environments = {
   port: Number(env.PORT || 3000),
   MONGO_URI: env.MONGO_URI,

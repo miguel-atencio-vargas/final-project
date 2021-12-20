@@ -113,9 +113,7 @@ export class CompanyCandidateService {
         configMailDto,
         contextMailDto,
       );
-    } catch (error) {
-      console.log('CompanyCandidateService', error.message);
-    }
+    } catch (error) {}
     candidate.depopulate('stageId openingId');
     return plainToClass(ReadCandidateDto, candidate);
   }
