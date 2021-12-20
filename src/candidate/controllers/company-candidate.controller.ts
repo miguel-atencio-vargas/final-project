@@ -122,7 +122,7 @@ export class CompanyCandidateController {
   )
   @Put(':companyId/candidates/:candidateId')
   putCandidate(
-    @Param('id') candidateId: string,
+    @Param('candidateId') candidateId: string,
     @Body() putCandidateDto: PutCandidateDto,
   ) {
     return this.candidateService.updateOne(candidateId, putCandidateDto);
