@@ -67,8 +67,32 @@ To run tests, run the following command
 | :-------- | :------- | :------------------------ |
 | `api_key` | `string` | Redirecton to google auth |
 
-## License
+## Environment Variables
 
-[MIT](https://choosealicense.com/licenses/mit/)
+To run this project, you will need to add the following environment variables to your .env file
+
+`SERVER_PORT`
+
+`APP_DOMAIN`
+
+`ENVIRONMENT`
+
+`MONGO_URI`
+
+`JWT_SECRET`
+
+`JWT_EXPIRES`
+
+`GOOGLE_CLIENT_ID`
+
+`GOOGLE_SECRET`
+
+`MAIL_HOST`
+
+`MAIL_PASSWORD`
+
+`MAIL_FROM`
+
+## License
 
 Copyright © Eliseo Hernandez , Miguel Atencio Vargas - 2021 all rights reserved.
