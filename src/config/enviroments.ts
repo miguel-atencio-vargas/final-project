@@ -2,8 +2,6 @@ import { config } from 'dotenv';
 config({ path: `.env.${process.env.ENVIRONMENT}` });
 const { env } = process;
 
-console.log(env.APP_DOMAIN);
-
 export const environments = {
   PORT: Number(env.PORT || 3000),
   APP_DOMAIN: env.APP_DOMAIN,

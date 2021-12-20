@@ -32,9 +32,9 @@ export class CandidateService {
     putCandidateDto: PutCandidateDto,
   ): Promise<ReadCandidateDto> {
     try {
-      const candidateUpdated = await this.candidateModel.findOneAndReplace(
-        { _id: candidateId },
-        putCandidateDto,
+      const candidateUpdated = await this.candidateModel.findByIdAndUpdate(
+        candidateId,
+        { $set: putCandidateDto },
         { new: true },
       );
       if (!candidateUpdated)

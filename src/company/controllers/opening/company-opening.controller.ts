@@ -83,11 +83,13 @@ export class CompanyOpeningController {
   })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
-  @Put(':openingId/companies/:companyId')
-  updateOpening(
+  @Put(':companyId/openings/:openingId')
+  async updateOpening(
     @Param('openingId') openingId: string,
+    @Param('companyId') companyId: string,
     @Body() patchOpeningDto: PutOpeningDto,
   ) {
+    await this.openingService.findOneOnACompany(openingId, companyId);
     return this.openingService.updateOne(openingId, patchOpeningDto);
   }
 
@@ -97,8 +99,12 @@ export class CompanyOpeningController {
     description: 'Opening has been deleted',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':openingId/companies/:companyId')
-  removeOpening(@Param('companyId') companyId: string) {
-    return this.openingService.removeOne(companyId);
+  @Delete(':companyId/openings/:openingId')
+  async removeOpening(
+    @Param('companyId') companyId: string,
+    @Param('openingId') openingId: string,
+  ) {
+    await this.openingService.findOneOnACompany(openingId, companyId);
+    return this.openingService.removeOne(openingId);
   }
 }

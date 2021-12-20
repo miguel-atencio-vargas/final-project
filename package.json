@@ -96,7 +96,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(controller).(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"

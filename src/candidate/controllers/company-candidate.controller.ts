@@ -21,6 +21,8 @@ import { Roles } from '../../auth/decorator/roles.decorator';
 import { RoleUser } from '../../users/enum/roles.enums';
 import { CompanyCandidateService } from '../services/company-candidate.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { OpeningService } from '../../company/services/opening.service';
+import { CandidateState } from '../enum/candidate-state.enum';
 
 @ApiResponse({
   status: 403,
@@ -32,6 +34,7 @@ export class CompanyCandidateController {
   constructor(
     private readonly candidateService: CandidateService,
     private readonly companyCandidateService: CompanyCandidateService,
+    private readonly openingService: OpeningService,
   ) {}
 
   @ApiOperation({ summary: 'Creates a new Candidate' })
@@ -47,7 +50,16 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Post(':companyId/candidates')
-  newCandidate(@Body() createCandidateDto: CreateCandidateDto) {
+  async newCandidate(
+    @Body() createCandidateDto: CreateCandidateDto,
+    @Param('companyId') companyId: string,
+  ) {
+    const opening = await this.openingService.findOneOnACompany(
+      createCandidateDto.openingId,
+      companyId,
+    );
+    createCandidateDto.openingId = opening._id;
+    createCandidateDto.stageId = CandidateState.AWAITING;
     return this.candidateService.create(createCandidateDto);
   }
   @ApiOperation({ summary: 'Get candiadate by Id' })
@@ -108,10 +120,12 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Put(':companyId/candidates/:candidateId')
-  putCandidate(
-    @Param('id') candidateId: string,
+  async putCandidate(
+    @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
     @Body() putCandidateDto: PutCandidateDto,
   ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.updateOne(candidateId, putCandidateDto);
   }
 
@@ -128,16 +142,18 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Patch(':companyId/candidates/:candidateId')
-  patchCandidate(
+  async patchCandidate(
     @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
     @Body() patchCandidateDto: PatchCandidateDto,
   ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.patchOne(candidateId, patchCandidateDto);
   }
 
   @ApiOperation({ summary: 'Deletes a candidate from the DB' })
   @ApiResponse({
-    status: 202,
+    status: 204,
     description: 'Candidate has been deleted',
   })
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -147,8 +163,12 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':companyId/candidates/candidateId')
-  removeCandidate(@Param('candidateId') candidateId: string) {
+  @Delete(':companyId/candidates/:candidateId')
+  async removeCandidate(
+    @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
+  ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.removeOne(candidateId);
   }
 

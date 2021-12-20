@@ -1,5 +1,13 @@
-import { Controller, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Post,
+  Req,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { CandidateOpeningService } from '../services/candidate-opening.service';
 
 @ApiTags('candidate opening')
@@ -22,11 +30,16 @@ export class CandidateOpeningController {
     name: 'openingId',
     description: 'id for a registered opening per Company',
   })
+  @UseGuards(JwtAuthGuard)
   @Post(':candidateId/openings/:openingId')
   applyToAnOpening(
     @Param('candidateId') candidateId: string,
     @Param('openingId') openingId: string,
+    @Req() { user },
   ) {
+    if (user._id !== candidateId) {
+      throw new UnauthorizedException('');
+    }
     return this.candidateOpeningService.applyTo(candidateId, openingId);
   }
 }
