@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ReadOpeningDto } from '../../company/dto/opening/read-opening.dto';
+import { OpeningService } from '../../company/services/opening.service';
 import { CompanyCandidateController } from '../controllers/company-candidate.controller';
 import { CreateCandidateDto } from '../dto/create-candidate.dto';
 import { PatchCandidateDto } from '../dto/patch-candidate.dto';
@@ -12,6 +14,7 @@ describe('CandidateController', () => {
   let companyCandidateController: CompanyCandidateController;
   let candidateService: CandidateService;
   let companyCandidateService: CompanyCandidateService;
+  let openingService: OpeningService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CompanyCandidateController],
@@ -21,9 +24,13 @@ describe('CandidateController', () => {
           useValue: {
             findOne: jest.fn(),
             getAll: jest.fn(),
-            create: jest.fn(),
-            findOneScopedByCompany: jest.fn(),
-            getAllScopedByCompany: jest.fn(),
+            create: jest.fn().mockResolvedValue(new ReadCandidateDto()),
+            findOneScopedByCompany: jest
+              .fn()
+              .mockResolvedValue(new ReadCandidateDto()),
+            getAllScopedByCompany: jest
+              .fn()
+              .mockResolvedValue([new ReadCandidateDto()]),
             updateOne: jest.fn(),
             patchOne: jest.fn(),
             removeOne: jest.fn(),
@@ -39,9 +46,16 @@ describe('CandidateController', () => {
             getStatus: jest.fn(),
           },
         },
+        {
+          provide: OpeningService,
+          useValue: {
+            findOneOnACompany: jest
+              .fn()
+              .mockResolvedValue(new ReadOpeningDto()),
+          },
+        },
       ],
     }).compile();
-
     companyCandidateController = module.get<CompanyCandidateController>(
       CompanyCandidateController,
     );
@@ -49,6 +63,7 @@ describe('CandidateController', () => {
     companyCandidateService = module.get<CompanyCandidateService>(
       CompanyCandidateService,
     );
+    openingService = module.get<OpeningService>(OpeningService);
   });
 
   it('should be defined', () => {
@@ -61,15 +76,12 @@ describe('CandidateController', () => {
       firstName: 'candidate',
       lastName: 'lastName',
       email: 'candidate@gmail.com',
+      openingId: '122',
     };
-    it('create', () => {
-      jest
-        .spyOn(candidateService, 'create')
-        .mockResolvedValue(new ReadCandidateDto());
+    it('should create a new candidate applied to an opening', () => {
       expect(
         companyCandidateController.newCandidate(createCandidate, companyId),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
-      expect(candidateService.create).toBeCalledWith(createCandidate);
     });
   });
 
@@ -77,9 +89,6 @@ describe('CandidateController', () => {
     const candidateId = '123';
     const companyId = '321';
     it('should retrieve one candidate scoped', () => {
-      jest
-        .spyOn(candidateService, 'findOneScopedByCompany')
-        .mockResolvedValue(new ReadCandidateDto());
       expect(
         companyCandidateController.getCandidateByIdScopedByCompany(
           candidateId,
@@ -97,9 +106,6 @@ describe('CandidateController', () => {
     const candidateId = '123';
     const companyId = '321';
     it('should retrieve one candidate scoped', () => {
-      jest
-        .spyOn(candidateService, 'findOneScopedByCompany')
-        .mockResolvedValue(new ReadCandidateDto());
       expect(
         companyCandidateController.getCandidateByIdScopedByCompany(
           candidateId,
@@ -116,9 +122,6 @@ describe('CandidateController', () => {
   describe('getCandidatesScopedByCompany()', () => {
     const companyId = '321';
     it('should retrieve all candidates scoped', () => {
-      jest
-        .spyOn(candidateService, 'getAllScopedByCompany')
-        .mockResolvedValue([new ReadCandidateDto()]);
       expect(
         companyCandidateController.getCandidatesScopedByCompany(companyId),
       ).resolves.toHaveLength(1);
@@ -146,10 +149,6 @@ describe('CandidateController', () => {
           putCandidate,
         ),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
-      expect(candidateService.updateOne).toBeCalledWith(
-        candidateId,
-        putCandidate,
-      );
     });
   });
 
@@ -170,10 +169,6 @@ describe('CandidateController', () => {
           patchCandidate,
         ),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
-      expect(candidateService.patchOne).toBeCalledWith(
-        candidateId,
-        patchCandidate,
-      );
     });
   });
 
@@ -186,7 +181,6 @@ describe('CandidateController', () => {
       });
       expect(companyCandidateController.removeCandidate(candidateId, companyId))
         .resolves;
-      expect(candidateService.removeOne).toBeCalledWith(candidateId);
     });
   });
 
