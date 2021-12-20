@@ -1,104 +1,53 @@
-# Title
+# Recruit Management API 💻
 
-## Description
-
-This RestAPI is building on
-[Nest](https://github.com/nestjs/nest) framework of TypeScript. Using Express plattform.
+This API provides an usefull management system for a recruitment process. You will be able to create companies, users, hiring stages and notify potential candidates of their current status.
 
 ## Authors
 
-- [@atencio947](https://twitter.com/atencio947)
-- [@eliseo](https://www.pleasecompletehere)
+- Miguel Atencio: [@atencio947](https://gitlab.com/atencio947)
+- Eliseo Hernandez [@ernesto1991diaz](https://gitlab.com/ernesto1991diaz/)
 
-## Tech Stack
+## Description
 
-**Platform:** Express v
+## Recruit Management has been created with the following resources:
 
-**Database:**
+- NodeJs powered with the NestJs Framework 🦁
+- MongoDB as database provider 🌱
+- Docker to build and deploy the API 🐳
+- Heroku as deployment solution enviroment ♓️
+- Google auth for registration 🔐
 
-**Documentation:** Swagger/OpenAPI
+## Installation
 
-**Authentication:**
-
-## Demo
-
-Insert gif or link to demo
-
-## API Reference
-
-#### Get all items
-
-```http
-  GET /api/items
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-#### Get item
-
-```http
-  GET /api/items/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
-
-## Deployment
-
-To deploy this project run
-
-```bash
-  npm run deploy
-```
-
-## Documentation
-
-[Documentation](https://linktodocumentation/api)
-
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
-
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://link-to-project
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install dependencies
+To install this project run
 
 ```bash
   npm install
 ```
 
-Enable Git hooks
+## Building and Running the App
+
+To build this project with a development enviroments run:
 
 ```bash
-  npx husky install
+  npm run dev:build
 ```
 
-Start the server
+To run this project with a development enviroments run:
 
 ```bash
-  npm run start
+  npm run dev:up
 ```
 
-## Running Tests
+## Documentation 📙
+
+[Documentation](https://glacial-coast-05912.herokuapp.com/api/)
+
+## App running on Heroku 🔥
+
+[Recruit Management](https://glacial-coast-05912.herokuapp.com/api/)
+
+## Running Tests ✍️
 
 To run tests, run the following command
 
@@ -106,6 +55,20 @@ To run tests, run the following command
   npm run test
 ```
 
+## API Reference
+
+#### Google Authentication
+
+```http
+  GET https://glacial-coast-05912.herokuapp.com/api/google
+```
+
+| Parameter | Type     | Description               |
+| :-------- | :------- | :------------------------ |
+| `api_key` | `string` | Redirecton to google auth |
+
 ## License
 
-Copyright © Eliseo, Miguel Atencio Vargas - 2021 all rights reserved.
+[MIT](https://choosealicense.com/licenses/mit/)
+
+Copyright © Eliseo Hernandez , Miguel Atencio Vargas - 2021 all rights reserved.
