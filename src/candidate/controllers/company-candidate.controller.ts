@@ -137,7 +137,7 @@ export class CompanyCandidateController {
 
   @ApiOperation({ summary: 'Deletes a candidate from the DB' })
   @ApiResponse({
-    status: 202,
+    status: 204,
     description: 'Candidate has been deleted',
   })
   @UseGuards(JwtAuthGuard, RolesGuard)
