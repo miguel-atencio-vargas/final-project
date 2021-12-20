@@ -56,6 +56,7 @@ describe('CandidateController', () => {
   });
 
   describe('newCandidate()', () => {
+    const companyId = '123';
     const createCandidate: CreateCandidateDto = {
       firstName: 'candidate',
       lastName: 'lastName',
@@ -66,7 +67,7 @@ describe('CandidateController', () => {
         .spyOn(candidateService, 'create')
         .mockResolvedValue(new ReadCandidateDto());
       expect(
-        companyCandidateController.newCandidate(createCandidate),
+        companyCandidateController.newCandidate(createCandidate, companyId),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
       expect(candidateService.create).toBeCalledWith(createCandidate);
     });
@@ -127,20 +128,23 @@ describe('CandidateController', () => {
 
   describe('putCandidate()', () => {
     const candidateId = '123';
+    const companyId = '321';
     const putCandidate: PutCandidateDto = {
       firstName: 'firstName',
       lastName: 'lastName',
       email: 'candidate@gmail.com',
       uid: '123',
-      openingId: '123',
-      stageId: '123',
     };
     it('should update a candidate', () => {
       jest
         .spyOn(candidateService, 'updateOne')
         .mockResolvedValue(new ReadCandidateDto());
       expect(
-        companyCandidateController.putCandidate(candidateId, putCandidate),
+        companyCandidateController.putCandidate(
+          candidateId,
+          companyId,
+          putCandidate,
+        ),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
       expect(candidateService.updateOne).toBeCalledWith(
         candidateId,
@@ -151,6 +155,7 @@ describe('CandidateController', () => {
 
   describe('patchCandidate()', () => {
     const candidateId = '123';
+    const companyId = '321';
     const patchCandidate: PatchCandidateDto = {
       firstName: 'firstName',
     };
@@ -159,7 +164,11 @@ describe('CandidateController', () => {
         .spyOn(candidateService, 'patchOne')
         .mockResolvedValue(new ReadCandidateDto());
       expect(
-        companyCandidateController.patchCandidate(candidateId, patchCandidate),
+        companyCandidateController.patchCandidate(
+          candidateId,
+          companyId,
+          patchCandidate,
+        ),
       ).resolves.toBeInstanceOf(ReadCandidateDto);
       expect(candidateService.patchOne).toBeCalledWith(
         candidateId,
@@ -170,11 +179,13 @@ describe('CandidateController', () => {
 
   describe('removeCandidate()', () => {
     const candidateId = '123';
+    const companyId = '321';
     it('should remove a candidate', () => {
       jest.spyOn(candidateService, 'removeOne').mockImplementation(async () => {
         return;
       });
-      expect(companyCandidateController.removeCandidate(candidateId)).resolves;
+      expect(companyCandidateController.removeCandidate(candidateId, companyId))
+        .resolves;
       expect(candidateService.removeOne).toBeCalledWith(candidateId);
     });
   });
