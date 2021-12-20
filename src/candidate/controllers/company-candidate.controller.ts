@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -21,6 +22,8 @@ import { Roles } from '../../auth/decorator/roles.decorator';
 import { RoleUser } from '../../users/enum/roles.enums';
 import { CompanyCandidateService } from '../services/company-candidate.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import { OpeningService } from '../../company/services/opening.service';
+import { CandidateState } from '../enum/candidate-state.enum';
 
 @ApiResponse({
   status: 403,
@@ -32,6 +35,7 @@ export class CompanyCandidateController {
   constructor(
     private readonly candidateService: CandidateService,
     private readonly companyCandidateService: CompanyCandidateService,
+    private readonly openingService: OpeningService,
   ) {}
 
   @ApiOperation({ summary: 'Creates a new Candidate' })
@@ -47,7 +51,16 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Post(':companyId/candidates')
-  newCandidate(@Body() createCandidateDto: CreateCandidateDto) {
+  async newCandidate(
+    @Body() createCandidateDto: CreateCandidateDto,
+    @Param('companyId') companyId: string,
+  ) {
+    const opening = await this.openingService.findOneOnACompany(
+      createCandidateDto.openingId,
+      companyId,
+    );
+    createCandidateDto.openingId = opening._id;
+    createCandidateDto.stageId = CandidateState.AWAITING;
     return this.candidateService.create(createCandidateDto);
   }
   @ApiOperation({ summary: 'Get candiadate by Id' })
