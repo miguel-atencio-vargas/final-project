@@ -85,10 +85,12 @@ export class CompanyStageController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
   @Put(':companyId/stages/:stageId')
-  updateStage(
+  async updateStage(
     @Param('stageId') stageId: string,
+    @Param('companyId') companyId: string,
     @Body() putStageDto: PutStageDto,
   ) {
+    await this.stageService.findOneOnACompany(companyId, stageId);
     return this.stageService.updateOne(stageId, putStageDto);
   }
 
@@ -101,7 +103,11 @@ export class CompanyStageController {
   @Roles(RoleUser.SUDO_ADMIN, RoleUser.COMPANY_ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':companyId/stages/:stageId')
-  removeStage(@Param('stageId') stageId: string) {
+  async removeStage(
+    @Param('stageId') stageId: string,
+    @Param('companyId') companyId: string,
+  ) {
+    await this.stageService.findOneOnACompany(companyId, stageId);
     return this.stageService.removeOne(stageId);
   }
 }
