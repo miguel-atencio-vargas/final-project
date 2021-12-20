@@ -4,7 +4,6 @@ import { CompanyService } from '../services/company.service';
 
 describe('CompanyController', () => {
   let companyController: CompanyController;
-  let companyService: CompanyService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,7 +17,6 @@ describe('CompanyController', () => {
     }).compile();
 
     companyController = module.get<CompanyController>(CompanyController);
-    companyService = module.get<CompanyService>(CompanyService);
   });
 
   it('should be defined', () => {

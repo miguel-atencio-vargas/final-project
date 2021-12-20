@@ -56,6 +56,7 @@ describe('CompanyStageController', () => {
 
   describe('updateStage()', () => {
     const stageId = '123';
+    const companyId = '432';
     const data: PutStageDto = {
       title: 'stage',
       description: 'stage desc',
@@ -63,17 +64,17 @@ describe('CompanyStageController', () => {
     };
     it('should update a stage of a company', () => {
       expect(
-        companyStageController.updateStage(stageId, data),
+        companyStageController.updateStage(stageId, companyId, data),
       ).resolves.toBeInstanceOf(ReadStageDto);
-      expect(stageService.updateOne).toBeCalledWith(stageId, data);
     });
   });
 
   describe('removeStage()', () => {
     const stageId = '123';
+    const companyId = '432';
     it('should remove a stage of a company', () => {
-      expect(companyStageController.removeStage(stageId)).resolves;
-      expect(stageService.removeOne).toBeCalledWith(stageId);
+      expect(companyStageController.removeStage(stageId, companyId)).resolves
+        .toBeUndefined;
     });
   });
 });
