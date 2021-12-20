@@ -140,7 +140,7 @@ export class CompanyCandidateService {
     }
     await candidate.populate('stageId');
     const stage = candidate.stageId;
-    return this.candidateModel.findByIdAndUpdate(
+    const candidateUpdated = await this.candidateModel.findByIdAndUpdate(
       candidateId,
       {
         stageId:
@@ -148,6 +148,7 @@ export class CompanyCandidateService {
       },
       { new: true },
     );
+    return plainToClass(ReadCandidateDto, candidateUpdated);
   }
 
   async rejectCandidate(candidateId: string) {
@@ -168,11 +169,12 @@ export class CompanyCandidateService {
         `This candidate is on ${candidate.stageId} status`,
       );
     }
-    return this.candidateModel.findByIdAndUpdate(
+    const candidateUpdated = await this.candidateModel.findByIdAndUpdate(
       candidateId,
       { stageId: CandidateState.REJECTED },
       { new: true },
     );
+    return plainToClass(ReadCandidateDto, candidateUpdated);
   }
 
   async getStatus(candidateId: string, companyId: string) {

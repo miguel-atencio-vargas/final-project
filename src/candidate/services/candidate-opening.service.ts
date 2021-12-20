@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { plainToClass } from 'class-transformer';
 import { OpeningService } from '../../company/services/opening.service';
 import { PatchInternalCandidateDto } from '../dto/patch-internal-candidate.dto';
+import { ReadCandidateDto } from '../dto/read-candidate.dto';
 import { CandidateState } from '../enum/candidate-state.enum';
 import { CandidateService } from './candidate.service';
 
@@ -23,6 +25,10 @@ export class CandidateOpeningService {
     const dataToUpdate = new PatchInternalCandidateDto();
     dataToUpdate.openingId = opening._id;
     dataToUpdate.stageId = CandidateState.AWAITING;
-    return this.candidateService.patchOne(candidateId, dataToUpdate);
+    const candidateApplied = await this.candidateService.patchOne(
+      candidateId,
+      dataToUpdate,
+    );
+    return plainToClass(ReadCandidateDto, candidateApplied);
   }
 }

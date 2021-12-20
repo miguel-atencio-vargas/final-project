@@ -147,7 +147,7 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':companyId/candidates/candidateId')
+  @Delete(':companyId/candidates/:candidateId')
   removeCandidate(@Param('candidateId') candidateId: string) {
     return this.candidateService.removeOne(candidateId);
   }
