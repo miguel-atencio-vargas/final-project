@@ -23,7 +23,13 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:build": "docker-compose --env-file .env.dev build",
+    "dev:down": "docker-compose --env-file .env.dev down",
+    "dev:up": "docker-compose --env-file .env.dev up",
+    "prod:build": "docker-compose --env-file .env.prod build",
+    "prod:down": "docker-compose --env-file .env.prod down",
+    "prod:up": "docker-compose --env-file .env.prod up"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.6.0",
