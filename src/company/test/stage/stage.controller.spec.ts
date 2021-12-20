@@ -9,11 +9,15 @@ describe('StageController', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       controllers: [StageController],
-      providers: [{ provide: StageService, useValue: { getAll: jest.fn() } }],
+      providers: [
+        {
+          provide: StageService,
+          useValue: { getAll: jest.fn(), findOne: jest.fn() },
+        },
+      ],
     }).compile();
 
     stageController = moduleRef.get<StageController>(StageController);
-    console.log('🚀 | beforeEach | stageController', stageController);
     stageService = moduleRef.get<StageService>(StageService);
   });
 
@@ -26,8 +30,19 @@ describe('StageController', () => {
       jest
         .spyOn(stageService, 'getAll')
         .mockResolvedValue([new ReadStageDto()]);
+      expect(stageController.getStages()).resolves.toHaveLength(1);
+      expect(stageService.getAll).toBeCalledTimes(1);
     });
-    expect(stageController.getStages()).resolves.toHaveLength(1);
-    expect(stageService.getAll).toBeCalledTimes(1);
+  });
+
+  describe('getStageById()', () => {
+    const stageId = '123';
+    it('should return one stage', () => {
+      jest.spyOn(stageService, 'findOne').mockResolvedValue(new ReadStageDto());
+      expect(stageController.getStageById(stageId)).resolves.toBeInstanceOf(
+        ReadStageDto,
+      );
+      expect(stageService.findOne).toBeCalledWith(stageId);
+    });
   });
 });

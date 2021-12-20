@@ -14,7 +14,6 @@ describe('CandidateController', () => {
   let companyCandidateController: CompanyCandidateController;
   let candidateService: CandidateService;
   let companyCandidateService: CompanyCandidateService;
-  let openingService: OpeningService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CompanyCandidateController],
@@ -63,7 +62,6 @@ describe('CandidateController', () => {
     companyCandidateService = module.get<CompanyCandidateService>(
       CompanyCandidateService,
     );
-    openingService = module.get<OpeningService>(OpeningService);
   });
 
   it('should be defined', () => {
