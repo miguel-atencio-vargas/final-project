@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -121,10 +120,12 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Put(':companyId/candidates/:candidateId')
-  putCandidate(
+  async putCandidate(
     @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
     @Body() putCandidateDto: PutCandidateDto,
   ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.updateOne(candidateId, putCandidateDto);
   }
 
@@ -141,10 +142,12 @@ export class CompanyCandidateController {
     RoleUser.COMPANY_RECRUITER,
   )
   @Patch(':companyId/candidates/:candidateId')
-  patchCandidate(
+  async patchCandidate(
     @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
     @Body() patchCandidateDto: PatchCandidateDto,
   ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.patchOne(candidateId, patchCandidateDto);
   }
 
@@ -161,7 +164,11 @@ export class CompanyCandidateController {
   )
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':companyId/candidates/:candidateId')
-  removeCandidate(@Param('candidateId') candidateId: string) {
+  async removeCandidate(
+    @Param('candidateId') candidateId: string,
+    @Param('companyId') companyId: string,
+  ) {
+    await this.candidateService.findOneScopedByCompany(companyId, candidateId);
     return this.candidateService.removeOne(candidateId);
   }
 
